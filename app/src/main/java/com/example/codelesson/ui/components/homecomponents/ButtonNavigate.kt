@@ -43,5 +43,5 @@ fun ButtonNavigate(modifier: Modifier, name: String) {
 @Preview
 @Composable
 private fun ButtonNavigatePreview() {
-    ButtonNavigate(Modifier.fillMaxWidth(), "Sexo")
+    ButtonNavigate(Modifier.fillMaxWidth(), "")
 }

@@ -12,5 +12,6 @@ sealed class LoginGraph(val route: String) {
 
 sealed class HomeGraph(val route: String) {
     data object Home: HomeGraph("Home")
+    data object Profile: HomeGraph("Profile")
     data object Theory: HomeGraph("Theory")
 }

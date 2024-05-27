@@ -24,6 +24,7 @@ import com.example.codelesson.ui.components.homecomponents.TopBar
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.navigation.NavBarGraph
 import com.example.codelesson.ui.theme.DividerPurple
+import com.example.codelesson.ui.theme.LessTransparentWhite
 import com.example.codelesson.ui.theme.NeonGreen
 import com.example.codelesson.ui.theme.TopBarGrey
 
@@ -90,7 +91,13 @@ fun BottomBar(
                         else
                             navItems.iconDefault,
                         contentDescription = navItems.description,
-                        tint = NeonGreen
+                        tint =
+                        if (currentRoute == navItems.route) {
+                            NeonGreen
+                        }
+                        else {
+                            LessTransparentWhite
+                        }
                     )
                 }
             )

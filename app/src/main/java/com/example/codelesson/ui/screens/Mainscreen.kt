@@ -27,12 +27,14 @@ import com.example.codelesson.ui.theme.DividerPurple
 import com.example.codelesson.ui.theme.LessTransparentWhite
 import com.example.codelesson.ui.theme.NeonGreen
 import com.example.codelesson.ui.theme.TopBarGrey
+import com.example.codelesson.util.HomeViewModel
 
 @Composable
 fun Main() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute: String? = navBackStackEntry?.destination?.route
+    val viewModel = HomeViewModel()
 
     fun setTitle(currentRoute: String?) : String {
         return when(currentRoute) {

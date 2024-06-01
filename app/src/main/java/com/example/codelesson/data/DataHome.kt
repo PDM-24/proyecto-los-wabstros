@@ -9,34 +9,43 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.codelesson.ui.components.navigation.HomeGraph
 
 data class DataHome(
-    val name: String
+    val name: String,
+    val topic: String
 )
 
 fun getName(): List<DataHome> {
     return listOf(
         DataHome(
-            "GET STARTED"
+            "GET STARTED",
+            "nosebro :("
         ),
         DataHome(
-            "SINTAXIS"
+            "SINTAXIS",
+            "Syntax"
         ),
         DataHome(
-            "SALIDA DE DATOS"
+            "SALIDA DE DATOS",
+            "Salida de datos"
         ),
         DataHome(
-            "COMENTARIOS"
+            "COMENTARIOS",
+            "Comentarios"
         ),
         DataHome(
-            "VARIABLES"
+            "VARIABLES",
+            "Variables"
         ),
         DataHome(
-            "ENTRADA DE DATOS"
+            "ENTRADA DE DATOS",
+            "Entrada de datos"
         ),
         DataHome(
-            "TIPOS DE DATOS"
+            "TIPOS DE DATOS",
+            "Tipos de datos????"
         ),
         DataHome(
-            "OPERADORES"
+            "OPERADORES",
+            "Operadores????"
         )
     )
 }
@@ -49,7 +58,7 @@ data class BottomNavItems(
     val route: String,
 )
 
-fun NavItemsList(): List<BottomNavItems> {
+fun navItemsList(): List<BottomNavItems> {
     return listOf(
         BottomNavItems
             (

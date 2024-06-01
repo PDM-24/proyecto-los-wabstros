@@ -3,6 +3,7 @@ package com.example.codelesson.ui.components.navigation
 sealed class Graph(val graph: String) {
     data object LOGIN : Graph("LOGIN")
     data object HOME : Graph("HOME")
+    data object QUIZ : Graph("QUIZ")
 }
 
 sealed class LoginGraph(val route: String) {
@@ -13,5 +14,9 @@ sealed class LoginGraph(val route: String) {
 sealed class HomeGraph(val route: String) {
     data object Home: HomeGraph("Home")
     data object Profile: HomeGraph("Profile")
-    data object Theory: HomeGraph("Theory")
+}
+
+sealed class QuizGraph(val route: String) {
+    data object Theory: QuizGraph("Theory")
+    data object Quiz: QuizGraph("Quiz")
 }

@@ -14,7 +14,8 @@ val audioWide = FontFamily(
 )
 
 val poppins = FontFamily(
-    Font(R.font.poppins_medium)
+    Font(R.font.poppins_medium),
+    Font(R.font.poppins_bold)
 )
 
 val Typography = Typography(

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,14 +19,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.codelesson.data.getName
 import com.example.codelesson.ui.components.homecomponents.ButtonNavigate
-import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.theme.CodeLessonTheme
+import com.example.codelesson.util.HomeViewModel
 
 @Composable
 fun Home(
     innerPadding: PaddingValues,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: HomeViewModel
 ) {
+    val title by viewModel.titleTopBar.collectAsState()
     CodeLessonTheme {
        LazyColumn(
            modifier = Modifier
@@ -39,8 +44,11 @@ fun Home(
                    modifier = Modifier
                        .width(300.dp)
                        .height(65.dp),
-                   it.name
-               ) { navController.navigate(HomeGraph.Theory.route) }
+                   it.name,
+               ) {
+                   viewModel.setTitle(it.name)
+                   navController.navigate("${Graph.QUIZ.graph}/${it.topic}")
+               }
            }
        }
    }
@@ -49,5 +57,9 @@ fun Home(
 @Preview
 @Composable
 private fun HomePreview() {
-    Home(innerPadding = PaddingValues(), NavHostController(LocalContext.current))
+    Home(
+        PaddingValues(),
+        NavHostController(LocalContext.current),
+        HomeViewModel()
+    )
 }

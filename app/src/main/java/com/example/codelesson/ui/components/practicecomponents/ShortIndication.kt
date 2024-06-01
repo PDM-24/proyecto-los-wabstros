@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.codelesson.R
 import com.example.codelesson.ui.theme.poppins
 
@@ -24,7 +25,8 @@ fun ShortIndication(indication: String){
             .padding(
                 top = 20.dp,
                 bottom = 30.dp,
-                start = 30.dp
+                start = 45.dp,
+                end = 25.dp
             )
     ){
         Icon(
@@ -38,10 +40,11 @@ fun ShortIndication(indication: String){
         Spacer(modifier = Modifier.padding(5.dp))
 
         Text(
-            text = indication,
+            text = indication.uppercase(),
             color = Color.White,
             fontFamily = poppins,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
         )
     }
 }

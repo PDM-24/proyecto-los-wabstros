@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
 import com.example.codelesson.ui.components.practicecomponents.Hint
+import com.example.codelesson.ui.components.practicecomponents.PracticeButton
 import com.example.codelesson.ui.components.practicecomponents.ShortIndication
 import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.ui.theme.FocusedFormWhite
@@ -116,6 +116,12 @@ fun ResponseEntry (innerPadding: PaddingValues){
                     onAny = { focusManager.clearFocus() }
                 )
             )
+
+            Spacer(modifier = Modifier.padding(10.dp))
+
+            PracticeButton(name = "Seguir", enable = false) {
+
+            }
         }
     }
 }

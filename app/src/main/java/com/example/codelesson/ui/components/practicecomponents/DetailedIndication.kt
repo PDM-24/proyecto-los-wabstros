@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.codelesson.ui.theme.poppins
@@ -20,11 +21,11 @@ fun DetailedIndication (indication: String){
             .padding(horizontal = 25.dp)
     ){
         Text(
-            text = indication,
+            text = indication.uppercase(),
             color = Color.White,
             fontFamily = poppins,
             fontWeight = FontWeight.W400,
-            fontSize = 16.sp
+            fontSize = 14.sp
         )
     }
 }

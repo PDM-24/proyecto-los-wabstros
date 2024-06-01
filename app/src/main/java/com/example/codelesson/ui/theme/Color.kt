@@ -25,6 +25,7 @@ val DividerPurple = Color(0x99C05CF6)
 val NeonPurple = Color(0xFFB62FFF)
 
 val FormWhite = Color(0x99D9D9D9)
+val FocusedFormWhite = Color(0xFFD9D9D9)
 val TransparentWhite = Color(0x99FFFFFF)
 val MoreTransparentWhite = Color(0x66FFFFFF)
 val LessTransparentWhite = Color(0xB3FFFFFF)

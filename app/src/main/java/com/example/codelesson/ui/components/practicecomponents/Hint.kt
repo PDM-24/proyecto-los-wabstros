@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,10 +86,11 @@ fun Hint(hint: String){
                 modifier = Modifier
                     .padding(top = 7.dp)
                     .padding(horizontal = 15.dp),
-                text = hint,
+                text = hint.uppercase(),
                 color = Color.White,
                 fontFamily = poppins,
-                fontSize = 16.5.sp
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium
             )
         }
     }

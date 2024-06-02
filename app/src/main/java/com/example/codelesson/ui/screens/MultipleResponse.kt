@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -45,10 +44,37 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MultipleResponse (innerPadding: PaddingValues){
-    
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .background(DarkGrey)
+        .padding(innerPadding),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        item {
+            Hint(hint = "El cout permite mostrar por pantalla cualquier tipo de dato.")
+            ShortIndication(indication = "escoge la opción correcta")
+            DetailedIndication(indication = "que hace el codigo?")
+            CodeBlock(code = "int NUMBERS = 01234;\n" +
+                    "\n" +
+                    "cout << NUMBERS;")
+
+            Spacer(modifier = Modifier.padding(2.dp))
+
+            AnswOption().forEach {
+                BttnMultChoice(answer = it)
+                Spacer(modifier = Modifier.padding(5.dp))
+            }
+
+            Spacer(modifier = Modifier.padding(3.dp))
+            
+            PracticeButton(name = "Seguir", enable = false) {
+
+            }
+        }
+    }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 private fun BttnMultChoice(answer: String){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope

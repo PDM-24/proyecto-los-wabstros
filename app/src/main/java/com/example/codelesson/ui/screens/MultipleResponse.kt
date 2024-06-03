@@ -43,10 +43,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-val isIncorrect: MutableState<Boolean> = mutableStateOf(false)
-val actualAnswer: MutableState<String> = mutableStateOf("")
-val changeAnswer: MutableState<Boolean> = mutableStateOf(false)
-val thereIsAnAnswer: MutableState<Boolean> = mutableStateOf(false)
+private val isIncorrect: MutableState<Boolean> = mutableStateOf(false)
+private val actualAnswer: MutableState<String> = mutableStateOf("")
+private val changeAnswer: MutableState<Boolean> = mutableStateOf(false)
+private val thereIsAnAnswer: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
 fun MultipleResponse (innerPadding: PaddingValues){

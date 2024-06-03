@@ -85,8 +85,7 @@ fun ResponseEntry (innerPadding: PaddingValues){
     }
 
     BackHandler(focused.value) {
-        focusManager.clearFocus()
-        focused.value = false
+        ClearFocus(focusManager, focused)
     }
 
     LazyColumn(
@@ -100,8 +99,7 @@ fun ResponseEntry (innerPadding: PaddingValues){
                     MutableInteractionSource()
                 }
             ) {
-                focusManager.clearFocus()
-                focused.value = false
+                ClearFocus(focusManager, focused)
             },
         horizontalAlignment = Alignment.CenterHorizontally,
         state = scrollState
@@ -158,7 +156,13 @@ fun ResponseEntry (innerPadding: PaddingValues){
                     fontSize = 13.sp
                 ),
                 keyboardActions = KeyboardActions(
-                    onAny = { responseHandler(lifeCycleScope, correctAnswer, focusManager, focused) }
+                    onAny = {
+                        if(actualAnswer.value != "")
+                            responseHandler(lifeCycleScope, correctAnswer, focusManager, focused)
+                        else{
+                            ClearFocus(focusManager, focused)
+                        }
+                    }
                 )
             )
 
@@ -196,6 +200,10 @@ private fun responseHandler(
         }
     }
 
+    ClearFocus(focusManager, focused)
+}
+
+private fun ClearFocus(focusManager: FocusManager, focused: MutableState<Boolean>){
     focusManager.clearFocus()
     focused.value = false
 }

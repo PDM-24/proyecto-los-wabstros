@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -47,9 +46,11 @@ import kotlinx.coroutines.launch
 val isIncorrect: MutableState<Boolean> = mutableStateOf(false)
 val actualAnswer: MutableState<String> = mutableStateOf("")
 val changeAnswer: MutableState<Boolean> = mutableStateOf(false)
+val thereIsAnAnswer: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
 fun MultipleResponse (innerPadding: PaddingValues){
+    val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
     val correctAnswer = "IMPRIME 01234"
 
     LazyColumn(modifier = Modifier
@@ -74,13 +75,21 @@ fun MultipleResponse (innerPadding: PaddingValues){
             }
 
             Spacer(modifier = Modifier.padding(3.dp))
-            
-            PracticeButton(name = "Seguir", enable = actualAnswer.value != "") {
-                /*if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
+
+            PracticeButton(name = "Seguir", enable = thereIsAnAnswer.value) {
+                if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
                     isIncorrect.value = false
                 }else{
                     isIncorrect.value = true
-                }*/
+
+                    thereIsAnAnswer.value = false
+
+                    lifeCycleScope.launch(Dispatchers.IO){
+                        delay(310)
+                        actualAnswer.value = ""
+                        isIncorrect.value = false
+                    }
+                }
             }
         }
     }
@@ -89,8 +98,6 @@ fun MultipleResponse (innerPadding: PaddingValues){
 
 @Composable
 private fun BttnMultChoice(answer: String, correctAnswer: String){
-    val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
-
     val isPressed = remember {
         mutableStateOf(false)
     }
@@ -111,7 +118,6 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
         else
             ButtonPurple1
 
-    val duration: Long = if(isIncorrect.value) 500 else 310
 
     val animatedColorContainer = animateColorAsState(
         targetValue = animatedColorSelectionContainer,
@@ -141,15 +147,11 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
 
             if(isPressed.value){
                 actualAnswer.value = answer
+                thereIsAnAnswer.value = true
             }else{
                 actualAnswer.value = ""
+                thereIsAnAnswer.value = false
             }
-
-            /*if(!isIncorrect.value){
-                PressingHandler(lifeCycleScope, isPressed, 310)
-            }else{
-                PressingHandler(lifeCycleScope, isPressed, 310)
-            }*/
         },
         colors = ButtonDefaults.buttonColors(
             containerColor = animatedColorContainer.value
@@ -179,15 +181,3 @@ private fun AnswOption(): List<String>{
 
 private fun VerifyingAnswer(answer: String, correctAnswer: String) =
     answer == correctAnswer
-
-private fun PressingHandler(
-    lifeCycleScope: LifecycleCoroutineScope,
-    isPressed: MutableState<Boolean>,
-    delay: Long){
-
-    lifeCycleScope.launch(Dispatchers.IO){
-        isPressed.value = true
-        delay(delay)
-        isPressed.value = false
-    }
-}

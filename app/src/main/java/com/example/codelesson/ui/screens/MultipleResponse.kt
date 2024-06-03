@@ -60,7 +60,10 @@ fun MultipleResponse (innerPadding: PaddingValues){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Hint(hint = "El cout permite mostrar por pantalla cualquier tipo de dato.")
+            Hint(
+                hint = "El cout permite mostrar por pantalla cualquier tipo de dato.",
+                isIncorrect = isIncorrect.value
+            )
             ShortIndication(indication = "escoge la opción correcta")
             DetailedIndication(indication = "que hace el codigo?")
             CodeBlock(code = "int NUMBERS = 01234;\n" +

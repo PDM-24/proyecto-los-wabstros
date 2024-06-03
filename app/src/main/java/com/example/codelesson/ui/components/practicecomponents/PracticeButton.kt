@@ -20,7 +20,7 @@ fun PracticeButton(name: String, enable: Boolean, onClick: () -> Unit){
     OutlinedButton(
         modifier = Modifier
             .width(200.dp),
-        onClick = { onClick },
+        onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(
             disabledContainerColor = Color.Transparent,
             containerColor = Green

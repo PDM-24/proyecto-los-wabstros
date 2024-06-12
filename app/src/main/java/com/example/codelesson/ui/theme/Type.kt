@@ -12,6 +12,13 @@ import com.example.codelesson.R
 val audioWide = FontFamily(
     Font(R.font.audiowide_regular, FontWeight.Bold)
 )
+
+val poppins = FontFamily(
+    Font(R.font.poppins_medium),
+    Font(R.font.poppins_bold),
+    Font(R.font.poppins_regular)
+)
+
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,

@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import com.example.codelesson.util.UserViewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +43,7 @@ import com.example.codelesson.ui.theme.TopBarGrey
 //val imagen: bitmap =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile (innerPadding: PaddingValues){
+fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel){
     Scaffold (
         topBar = {
             TopBar(

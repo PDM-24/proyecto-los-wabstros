@@ -50,6 +50,7 @@ import com.example.codelesson.ui.theme.LetterTransparentBlack
 import com.example.codelesson.ui.theme.Red
 import com.example.codelesson.ui.theme.TransparentWhite
 import com.example.codelesson.ui.theme.poppins
+import com.example.codelesson.util.PracticeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ private val actualAnswer: MutableState<String> = mutableStateOf("")
 private val isIncorrect: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
-fun ResponseEntry (innerPadding: PaddingValues){
+fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
 
     val focused = remember {

@@ -1,13 +1,10 @@
 package com.example.codelesson.ui.screens
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import com.example.codelesson.util.UserViewModel
 
 @Composable
-fun LogIn (
-    userViewModel: UserViewModel,
-    navController: NavHostController
-){
+fun EditProfile(innerPadding: PaddingValues, viewModel: UserViewModel) {
 
 }

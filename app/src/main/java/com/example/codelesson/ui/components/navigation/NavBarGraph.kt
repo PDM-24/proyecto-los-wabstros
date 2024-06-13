@@ -1,0 +1,25 @@
+package com.example.codelesson.ui.components.navigation
+
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import com.example.codelesson.util.PracticeViewModel
+import com.example.codelesson.util.UserViewModel
+
+@Composable
+fun NavBarGraph(
+    innerPadding: PaddingValues,
+    navController: NavHostController,
+    practiceViewModel: PracticeViewModel,
+    userViewModel: UserViewModel
+    ) {
+    NavHost(
+        navController = navController,
+        route = Graph.ROOT.graph,
+        startDestination = Graph.HOME.graph
+    ) {
+        loginGraph(navController, userViewModel)
+        homeGraph(innerPadding,navController ,practiceViewModel, userViewModel)
+    }
+}

@@ -19,12 +19,16 @@ import com.example.codelesson.ui.theme.audioWide
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ButtonNavigate(modifier: Modifier, name: String) {
+fun ButtonNavigate(
+    modifier: Modifier,
+    name: String,
+    onClick: () -> Unit
+) {
     OutlinedCard(
         shape = RoundedCornerShape(24.dp),
         modifier = modifier,
         border = BorderStroke(2.dp, MoreTransparentWhite),
-        onClick = { /*TODO*/ },
+        onClick = { onClick() },
     ) {
         Box(
             modifier = Modifier
@@ -43,5 +47,5 @@ fun ButtonNavigate(modifier: Modifier, name: String) {
 @Preview
 @Composable
 private fun ButtonNavigatePreview() {
-    ButtonNavigate(Modifier.fillMaxWidth(), "")
+    ButtonNavigate(Modifier.fillMaxWidth(), "", {})
 }

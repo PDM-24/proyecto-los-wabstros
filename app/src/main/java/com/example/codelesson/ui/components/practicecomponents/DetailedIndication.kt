@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.codelesson.ui.theme.poppins
@@ -28,4 +28,10 @@ fun DetailedIndication (indication: String){
             fontSize = 14.sp
         )
     }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+private fun Previw() {
+    DetailedIndication(indication = "")
 }

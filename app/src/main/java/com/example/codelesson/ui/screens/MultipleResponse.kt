@@ -39,6 +39,7 @@ import com.example.codelesson.ui.theme.DarkRed
 import com.example.codelesson.ui.theme.NeonPurple
 import com.example.codelesson.ui.theme.Red
 import com.example.codelesson.ui.theme.audioWide
+import com.example.codelesson.util.PracticeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ private val changeAnswer: MutableState<Boolean> = mutableStateOf(false)
 private val thereIsAnAnswer: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
-fun MultipleResponse (innerPadding: PaddingValues){
+fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
     val correctAnswer = "IMPRIME 01234"
 

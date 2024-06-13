@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +27,6 @@ fun Home(
     navController: NavHostController,
     viewModel: HomeViewModel
 ) {
-    val title by viewModel.titleTopBar.collectAsState()
     CodeLessonTheme {
        LazyColumn(
            modifier = Modifier
@@ -47,7 +44,7 @@ fun Home(
                    it.name,
                ) {
                    viewModel.setTitle(it.name)
-                   navController.navigate("${Graph.QUIZ.graph}/${it.topic}")
+                   navController.navigate(Graph.QUIZ.graph)
                }
            }
        }

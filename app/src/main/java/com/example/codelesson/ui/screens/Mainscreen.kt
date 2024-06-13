@@ -72,7 +72,11 @@ fun MainScreen() {
             }
         }
     }) { innerPadding ->
-        NavBarGraph(innerPadding, navController)
+        NavBarGraph(
+            innerPadding,
+            navController,
+            viewModel
+        )
     }
 }
 

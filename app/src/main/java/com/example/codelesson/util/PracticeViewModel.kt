@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class HomeViewModel : ViewModel() {
+class PracticeViewModel : ViewModel() {
     private val _titleTopBar = MutableStateFlow("Desarrollador C++")
     val titleTopBar = _titleTopBar.asStateFlow()
 

@@ -1,34 +1,87 @@
 package com.example.codelesson.data
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.codelesson.ui.components.navigation.HomeGraph
+
 data class DataHome(
-    val name: String
+    val name: String,
+    val topic: String
 )
 
 fun getName(): List<DataHome> {
     return listOf(
         DataHome(
-            "GET STARTED"
+            "GET STARTED",
+            "Estructura básica"
         ),
         DataHome(
-            "SINTAXIS"
+            "Sintaxis",
+            "Syntax"
         ),
         DataHome(
-            "SALIDA DE DATOS"
+            "SALIDA DE DATOS",
+            "Output"
         ),
         DataHome(
-            "COMENTARIOS"
+            "COMENTARIOS",
+            "Comentarios"
         ),
         DataHome(
-            "VARIABLES"
+            "VARIABLES",
+            "Tipos de variables"
         ),
         DataHome(
-            "ENTRADA DE DATOS"
+            "ENTRADA DE DATOS",
+            "Inputs"
         ),
         DataHome(
-            "TIPOS DE DATOS"
+            "OPERADORES",
+            "Operadores"
         ),
         DataHome(
-            "OPERADORES"
+            "STRINGS",
+            "Strings"
+        ),
+        DataHome(
+            "BOOLEANOS",
+            "Booleanos"
+        ),
+        DataHome(
+            "CONDICIONES",
+            "Condiciones"
+        )
+    )
+}
+
+data class BottomNavItems(
+    val title: String,
+    val description: String,
+    val iconDefault: ImageVector,
+    val iconSelected: ImageVector,
+    val route: String,
+)
+
+fun navItemsList(): List<BottomNavItems> {
+    return listOf(
+        BottomNavItems
+            (
+            "Desarrollador C++",
+            "Home",
+            Icons.Outlined.Home,
+            Icons.Filled.Home,
+            HomeGraph.Home.route
+        ),
+        BottomNavItems(
+            "Profile",
+            "Profile",
+            Icons.Outlined.Person,
+            Icons.Filled.Person,
+            HomeGraph.Profile.route
         )
     )
 }

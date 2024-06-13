@@ -19,13 +19,13 @@ import com.example.codelesson.data.getName
 import com.example.codelesson.ui.components.homecomponents.ButtonNavigate
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.theme.CodeLessonTheme
-import com.example.codelesson.util.HomeViewModel
+import com.example.codelesson.util.PracticeViewModel
 
 @Composable
 fun Home(
     innerPadding: PaddingValues,
     navController: NavHostController,
-    viewModel: HomeViewModel
+    viewModel: PracticeViewModel
 ) {
     CodeLessonTheme {
        LazyColumn(
@@ -57,6 +57,6 @@ private fun HomePreview() {
     Home(
         PaddingValues(),
         NavHostController(LocalContext.current),
-        HomeViewModel()
+        PracticeViewModel()
     )
 }

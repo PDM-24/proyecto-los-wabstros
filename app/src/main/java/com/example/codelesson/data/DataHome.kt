@@ -17,15 +17,15 @@ fun getName(): List<DataHome> {
     return listOf(
         DataHome(
             "GET STARTED",
-            "nosebro :("
+            "Estructura básica"
         ),
         DataHome(
-            "SINTAXIS",
+            "Sintaxis",
             "Syntax"
         ),
         DataHome(
             "SALIDA DE DATOS",
-            "Salida de datos"
+            "Output"
         ),
         DataHome(
             "COMENTARIOS",
@@ -33,19 +33,27 @@ fun getName(): List<DataHome> {
         ),
         DataHome(
             "VARIABLES",
-            "Variables"
+            "Tipos de variables"
         ),
         DataHome(
             "ENTRADA DE DATOS",
-            "Entrada de datos"
-        ),
-        DataHome(
-            "TIPOS DE DATOS",
-            "Tipos de datos????"
+            "Inputs"
         ),
         DataHome(
             "OPERADORES",
-            "Operadores????"
+            "Operadores"
+        ),
+        DataHome(
+            "STRINGS",
+            "Strings"
+        ),
+        DataHome(
+            "BOOLEANOS",
+            "Booleanos"
+        ),
+        DataHome(
+            "CONDICIONES",
+            "Condiciones"
         )
     )
 }

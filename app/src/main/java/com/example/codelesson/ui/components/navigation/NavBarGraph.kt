@@ -8,54 +8,39 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.navArgument
 import com.example.codelesson.ui.screens.Home
 import com.example.codelesson.ui.screens.Profile
 import com.example.codelesson.ui.screens.Theory
 import com.example.codelesson.util.HomeViewModel
 
 @Composable
-fun NavBarGraph(innerPadding: PaddingValues, navController: NavHostController) {
-    val viewModel = viewModel<HomeViewModel>()
-
+fun NavBarGraph(
+    innerPadding: PaddingValues,
+    navController: NavHostController,
+    viewModel: HomeViewModel
+) {
     NavHost(
         navController = navController,
         route = Graph.HOME.graph,
         startDestination = HomeGraph.Home.route
     ) {
         composable(HomeGraph.Home.route) {
-//            val viewModel = it.sharedViewModel<HomeViewModel>(navController)
             Home(innerPadding, navController, viewModel)
         }
 
         composable(HomeGraph.Profile.route) {
-//            val viewModel = it.sharedViewModel<HomeViewModel>(navController)
             Profile(innerPadding)
         }
 
         navigation(
-            route = "${Graph.QUIZ.graph}/{title}",
-            startDestination = QuizGraph.Theory.route,
-            arguments = listOf(
-                navArgument("title") {
-                    type = NavType.StringType
-                }
-            )
+            route = Graph.QUIZ.graph,
+            startDestination = QuizGraph.Theory.route
         ) {
-            composable(
-                QuizGraph.Theory.route,
-            ) { entry ->
-                val parentEntry =
-                    remember(entry) {
-                        navController.getBackStackEntry("${Graph.QUIZ.graph}/{title}")
-                    }
-                val title = parentEntry.arguments?.getString("title")
-//                val viewModel = entry.sharedViewModel<HomeViewModel>(navController)
-                Theory(innerPadding, navController, viewModel, title)
+            composable(QuizGraph.Theory.route) {
+                Theory(innerPadding, navController, viewModel)
             }
         }
     }

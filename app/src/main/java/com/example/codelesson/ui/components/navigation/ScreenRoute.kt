@@ -16,6 +16,10 @@ sealed class HomeGraph(val route: String) {
     data object Profile: HomeGraph("Profile")
 }
 
+sealed class Profile(val route: String) {
+
+}
+
 sealed class QuizGraph(val route: String) {
     data object Theory: QuizGraph("Theory")
     data object Quiz: QuizGraph("Quiz")

@@ -12,13 +12,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.codelesson.util.HomeViewModel
+import com.example.codelesson.util.PracticeViewModel
 
 @Composable
 fun Theory(
     innerPadding: PaddingValues,
     navController: NavHostController,
-    viewModel: HomeViewModel
+    viewModel: PracticeViewModel
 ) {
     val titleTheory by viewModel.titleTopBar.collectAsState()
 
@@ -35,5 +35,5 @@ fun Theory(
 @Preview
 @Composable
 private fun Preview() {
-    Theory(innerPadding = PaddingValues(), navController = NavHostController(LocalContext.current), viewModel =HomeViewModel() )
+    Theory(innerPadding = PaddingValues(), navController = NavHostController(LocalContext.current), viewModel =PracticeViewModel() )
 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.ProfileGraph
 
 data class DataHome(
     val name: String,
@@ -81,7 +82,7 @@ fun navItemsList(): List<BottomNavItems> {
             "Profile",
             Icons.Outlined.Person,
             Icons.Filled.Person,
-            HomeGraph.Profile.route
+            ProfileGraph.Profile.route
         )
     )
 }

@@ -5,17 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.codelesson.ui.theme.poppins
 
 @Composable
-fun CodeBlock(code: String){
+fun CodeBlock(
+    content: @Composable() () -> Unit
+){
     Spacer(modifier = Modifier.padding(3.dp))
 
     Column(
@@ -27,12 +25,6 @@ fun CodeBlock(code: String){
                 vertical = 20.dp
             )
     ) {
-        Text(
-            text = code,
-            color = Color.White,
-            fontFamily = poppins,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp
-        )
+        content()
     }
 }

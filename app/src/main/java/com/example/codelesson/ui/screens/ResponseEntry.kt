@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -55,6 +56,8 @@ import com.example.codelesson.ui.theme.LetterTransparentBlack
 import com.example.codelesson.ui.theme.Red
 import com.example.codelesson.ui.theme.TransparentWhite
 import com.example.codelesson.ui.theme.poppins
+import com.example.codelesson.util.AnimatingColors
+import com.example.codelesson.util.KeyboardFunctions
 import com.example.codelesson.util.PracticeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -77,9 +80,10 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
     val focusManager = LocalFocusManager.current
     val correctAnswer = ">"
 
-    val animatedColorContainer = animateColorAsState(
-        targetValue = if(isIncorrect.value) Red else FormWhite,
-        animationSpec = tween(200, 0, LinearEasing)
+    val animatedColorContainer = AnimatingColors.animatingColor(
+        inicialColor = FormWhite,
+        reactiveColor = Red,
+        condition = isIncorrect
     )
 
     val code = "if(n $$ 3){\n\n...\n\n}"
@@ -94,9 +98,7 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
         }
     }
 
-    BackHandler(focused.value) {
-        ClearFocus(focusManager, focused)
-    }
+
 
     LazyColumn(
         modifier = Modifier
@@ -109,7 +111,7 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
                     MutableInteractionSource()
                 }
             ) {
-                ClearFocus(focusManager, focused)
+                KeyboardFunctions.ClearFocus(focusManager, focused)
             },
         horizontalAlignment = Alignment.CenterHorizontally,
         state = scrollState
@@ -191,9 +193,9 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
                 keyboardActions = KeyboardActions(
                     onAny = {
                         if(actualAnswer.value != "")
-                            responseHandler(lifeCycleScope, correctAnswer, focusManager, focused)
+                            responseHandler(lifeCycleScope, correctAnswer, focusManager, focused, viewModel)
                         else{
-                            ClearFocus(focusManager, focused)
+                            KeyboardFunctions.ClearFocus(focusManager, focused)
                         }
                     }
                 )
@@ -204,7 +206,7 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
 
         item(1){
             PracticeButton(name = "Seguir", enable = actualAnswer.value != "") {
-                responseHandler(lifeCycleScope, correctAnswer, focusManager, focused)
+                responseHandler(lifeCycleScope, correctAnswer, focusManager, focused, viewModel)
             }
 
             Spacer(modifier = Modifier.padding(2.dp))
@@ -212,16 +214,16 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
     }
 }
 
-private fun VerifyingAnswer(answer: String, correctAnswer: String) =
-    answer == correctAnswer
+
 
 private fun responseHandler(
     lifeCycleScope: LifecycleCoroutineScope,
     correctAnswer: String,
     focusManager: FocusManager,
-    focused: MutableState<Boolean>
+    focused: MutableState<Boolean>,
+    viewModel: PracticeViewModel
 ){
-    if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
+    if(viewModel.VerifyingAnswer(actualAnswer.value, correctAnswer)){
         /* TODO: navigation */
     }else{
         isIncorrect.value = true
@@ -233,10 +235,6 @@ private fun responseHandler(
         }
     }
 
-    ClearFocus(focusManager, focused)
+    KeyboardFunctions.ClearFocus(focusManager, focused)
 }
 
-private fun ClearFocus(focusManager: FocusManager, focused: MutableState<Boolean>){
-    focusManager.clearFocus()
-    focused.value = false
-}

@@ -11,4 +11,6 @@ class PracticeViewModel : ViewModel() {
     fun setTitle(title: String) {
         _titleTopBar.value = title
     }
+    fun VerifyingAnswer(answer: String, correctAnswer: String) =
+        answer == correctAnswer
 }

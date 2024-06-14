@@ -5,9 +5,9 @@ import androidx.navigation.NavHostController
 import com.example.codelesson.util.UserViewModel
 
 @Composable
-fun LogIn (
+fun CreateAccount(
     userViewModel: UserViewModel,
     navController: NavHostController
-){
-
+) {
+    
 }

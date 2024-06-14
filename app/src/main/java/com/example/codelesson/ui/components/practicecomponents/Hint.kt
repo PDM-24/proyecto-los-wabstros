@@ -33,11 +33,7 @@ import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.ui.theme.poppins
 
 @Composable
-fun Hint(hint: String){
-    val on = remember {
-        mutableStateOf(false)
-    }
-
+fun Hint(hint: String, isIncorrect: Boolean){
     Column (
         modifier = Modifier
             .background(Color.Transparent)
@@ -61,7 +57,7 @@ fun Hint(hint: String){
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(!on.value){
+                if(!isIncorrect){
                     Icon(
                         modifier = Modifier
                             .size(27.dp),

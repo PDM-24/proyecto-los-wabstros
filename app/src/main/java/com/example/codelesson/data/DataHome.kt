@@ -10,50 +10,39 @@ import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.navigation.ProfileGraph
 
 data class DataHome(
-    val name: String,
-    val topic: String
+    val name: String
 )
 
 fun getName(): List<DataHome> {
     return listOf(
         DataHome(
-            "GET STARTED",
-            "Estructura básica"
+            "Estructura básica",
         ),
         DataHome(
-            "Sintaxis",
-            "Syntax"
+            "Sintaxis"
         ),
         DataHome(
-            "SALIDA DE DATOS",
             "Output"
         ),
         DataHome(
-            "COMENTARIOS",
             "Comentarios"
         ),
         DataHome(
-            "VARIABLES",
             "Tipos de variables"
         ),
         DataHome(
-            "ENTRADA DE DATOS",
             "Inputs"
         ),
         DataHome(
-            "OPERADORES",
             "Operadores"
         ),
         DataHome(
-            "STRINGS",
             "Strings"
         ),
         DataHome(
-            "BOOLEANOS",
             "Booleanos"
         ),
         DataHome(
-            "CONDICIONES",
             "Condiciones"
         )
     )

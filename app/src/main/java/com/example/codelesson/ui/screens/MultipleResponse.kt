@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
 import com.example.codelesson.ui.components.practicecomponents.Hint
@@ -39,6 +40,7 @@ import com.example.codelesson.ui.theme.DarkRed
 import com.example.codelesson.ui.theme.NeonPurple
 import com.example.codelesson.ui.theme.Red
 import com.example.codelesson.ui.theme.audioWide
+import com.example.codelesson.util.AnimatingColors
 import com.example.codelesson.util.PracticeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -67,9 +69,13 @@ fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel)
             )
             ShortIndication(indication = "escoge la opción correcta")
             DetailedIndication(indication = "que hace el codigo?")
-            CodeBlock(code = "int NUMBERS = 01234;\n" +
-                    "\n" +
-                    "cout << NUMBERS;")
+
+            CodeBlock {
+                BlackBoxText(text = "int NUMBERS = 01234;\n" +
+                        "\n" +
+                        "cout << NUMBERS;")
+
+            }
 
             Spacer(modifier = Modifier.padding(2.dp))
 
@@ -123,15 +129,9 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
             ButtonPurple1
 
 
-    val animatedColorContainer = animateColorAsState(
-        targetValue = animatedColorSelectionContainer,
-        animationSpec = tween(200, 0, LinearEasing)
-    )
+    val animatedColorContainer = AnimatingColors.animatingColor(color = animatedColorSelectionContainer)
 
-    val animatedColorBorder = animateColorAsState(
-        targetValue = animatedColorSelectionBorder,
-        animationSpec = tween(200, 0, LinearEasing)
-    )
+    val animatedColorBorder = AnimatingColors.animatingColor(color = animatedColorSelectionBorder)
 
     if(isPressed.value && answer != actualAnswer.value){
         isPressed.value = false

@@ -11,10 +11,13 @@ import kotlinx.coroutines.flow.asStateFlow
         private val _emptyLabelPosition = MutableStateFlow(Offset.Zero)
         val emptyLabelPosition = _emptyLabelPosition.asStateFlow()
 
+    fun setTitle(title: String) {
+        _titleTopBar.value = title
+    }
+    fun VerifyingAnswer(answer: String, correctAnswer: String) =
+        answer == correctAnswer
+}
         fun getEmptyLabelPosition(position: Offset) {
             _emptyLabelPosition.value = position
-        }
-        fun setTitle(title: String) {
-            _titleTopBar.value = title
         }
     }

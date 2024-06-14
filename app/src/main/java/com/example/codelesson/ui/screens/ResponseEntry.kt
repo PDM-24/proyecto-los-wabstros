@@ -7,9 +7,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -37,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
+import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
 import com.example.codelesson.ui.components.practicecomponents.Hint
@@ -70,12 +75,16 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
     val scrollState = rememberLazyListState()
 
     val focusManager = LocalFocusManager.current
-    val correctAnswer = "<="
+    val correctAnswer = ">"
 
     val animatedColorContainer = animateColorAsState(
         targetValue = if(isIncorrect.value) Red else FormWhite,
         animationSpec = tween(200, 0, LinearEasing)
     )
+
+    val code = "if(n $$ 3){\n\n...\n\n}"
+
+    val splitedCode = code.split("$$")
 
     LaunchedEffect(imeState.value) {
         if(imeState.value){
@@ -109,15 +118,38 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
             Hint(hint = "El operador de lógico > permite saber cuando un número es mayor o igual a otro.",
                 isIncorrect = isIncorrect.value)
 
-            ShortIndication(indication = "Encuentra el error")
+            ShortIndication(indication = "Completa con la respuesta correcta")
 
             DetailedIndication(indication = "validacion para entrar al if si n es mayor que 3")
 
-            CodeBlock(code = "if(n <= 3){\n" +
-                    "\n" +
-                    "...\n" +
-                    "\n" +
-                    "}")
+            CodeBlock {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        BlackBoxText(text = splitedCode[0])
+
+                        Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+
+                        if(actualAnswer.value == ""){
+                            Box(modifier = Modifier
+                                .height(15.dp)
+                                .width(15.dp)
+                                .background(Color.White)
+                            )
+                        }else{
+                            BlackBoxText(text = actualAnswer.value)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+
+                    BlackBoxText(text = splitedCode[1])
+                }
+            }
 
             Spacer(modifier = Modifier.padding(20.dp))
 

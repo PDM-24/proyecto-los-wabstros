@@ -40,6 +40,7 @@ import com.example.codelesson.ui.theme.DarkRed
 import com.example.codelesson.ui.theme.NeonPurple
 import com.example.codelesson.ui.theme.Red
 import com.example.codelesson.ui.theme.audioWide
+import com.example.codelesson.util.AnimatingColors
 import com.example.codelesson.util.PracticeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -128,15 +129,9 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
             ButtonPurple1
 
 
-    val animatedColorContainer = animateColorAsState(
-        targetValue = animatedColorSelectionContainer,
-        animationSpec = tween(200, 0, LinearEasing)
-    )
+    val animatedColorContainer = AnimatingColors.animatingColor(color = animatedColorSelectionContainer)
 
-    val animatedColorBorder = animateColorAsState(
-        targetValue = animatedColorSelectionBorder,
-        animationSpec = tween(200, 0, LinearEasing)
-    )
+    val animatedColorBorder = AnimatingColors.animatingColor(color = animatedColorSelectionBorder)
 
     if(isPressed.value && answer != actualAnswer.value){
         isPressed.value = false

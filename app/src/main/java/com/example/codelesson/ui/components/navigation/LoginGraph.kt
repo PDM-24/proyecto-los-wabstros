@@ -17,11 +17,11 @@ fun NavGraphBuilder.loginGraph(
         startDestination = LoginGraph.Login.route
     ) {
         composable(LoginGraph.Login.route) {
-            LogIn(userViewModel, navController)
+            LogIn(navController = navController)
         }
 
         composable(LoginGraph.SignOn.route) {
-            CreateAccount(userViewModel, navController)
+            CreateAccount(navController = navController)
         }
     }
 }

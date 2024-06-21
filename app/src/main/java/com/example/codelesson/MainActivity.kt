@@ -20,8 +20,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.codelesson.ui.components.homecomponents.TopBar
 import com.example.codelesson.ui.components.navbar.BottomBar
 import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.LoginGraph
 import com.example.codelesson.ui.components.navigation.NavBarGraph
-import com.example.codelesson.ui.components.navigation.QuizGraph
+import com.example.codelesson.ui.components.navigation.ProfileGraph
 import com.example.codelesson.ui.theme.CodeLessonTheme
 import com.example.codelesson.ui.theme.DividerPurple
 import com.example.codelesson.ui.theme.TopBarGrey
@@ -33,7 +34,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CodeLessonTheme {
-                {/* TO DO */}
                 val viewModel: PracticeViewModel = viewModel()
                 val userViewModel: UserViewModel = viewModel()
                 val navController = rememberNavController()
@@ -42,19 +42,32 @@ class MainActivity : ComponentActivity() {
                 val currentRoute: String? = navBackStackEntry?.destination?.route
 
                 val title = viewModel.titleTopBar.collectAsState()
-                val topBarTitle = if (currentRoute == HomeGraph.Home.route) "Desarrollador C++" else title.value
+                val topBarTitle =
+                    if (currentRoute == HomeGraph.Home.route) "Desarrollador C++" else title.value
 
+                val routesBottomBar = listOf(
+                    HomeGraph.Home.route,
+                    ProfileGraph.Profile.route
+                )
+                val routesTopBar = listOf(
+                    LoginGraph.Login.route,
+                    LoginGraph.SignOn.route
+                )
+
+                Log.d("Ruta", currentRoute.toString())
                 Scaffold(topBar = {
-                    TopBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(TopBarGrey)
-                            .padding(24.dp),
-                        topBarTitle
-                    )
+                    if (currentRoute !in routesTopBar) {
+                        TopBar(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(TopBarGrey)
+                                .padding(24.dp),
+                            topBarTitle
+                        )
+                    }
                 }, bottomBar = {
-                    Column {
-                        if (currentRoute != QuizGraph.Theory.route) {
+                    if (currentRoute in routesBottomBar) {
+                        Column {
                             Divider(thickness = 2.dp, color = DividerPurple)
                             BottomBar(
                                 currentRoute,

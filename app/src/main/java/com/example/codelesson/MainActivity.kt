@@ -53,8 +53,6 @@ class MainActivity : ComponentActivity() {
                     LoginGraph.Login.route,
                     LoginGraph.SignOn.route
                 )
-
-                Log.d("Ruta", currentRoute.toString())
                 Scaffold(topBar = {
                     if (currentRoute !in routesTopBar) {
                         TopBar(

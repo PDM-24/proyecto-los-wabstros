@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.codelesson.model.Practice
 import com.example.codelesson.model.Question
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -61,6 +62,42 @@ class PracticeViewModel : ViewModel() {
     )
 
     val practiceList = _practiceList.asStateFlow()
+
+    private val _questionList = MutableStateFlow(_practiceList.value.questions.shuffled())
+    val questionList = _questionList.asStateFlow()
+
+    private val _nextNavigationRoute = MutableStateFlow("")
+    val nextNavigationRoute = _nextNavigationRoute.asStateFlow()
+
+    private val _index = MutableStateFlow(0)
+    val index = _index.asStateFlow()
+
+    fun resetIndex(){
+        _index.value = 0
+    }
+
+    fun restIndex(){
+        _index.value = _index.value--
+    }
+
+    fun addIndex(){
+        if(_questionList.value.size > _index.value)
+            _index.value = _index.value++
+    }
+
+    fun resetNavRoute() {
+        _nextNavigationRoute.value = ""
+    }
+
+    fun verifyTypeOfQuestion(
+        index: Int
+    ){
+        when(_questionList.value[index].type){
+            1 -> _nextNavigationRoute.value = QuizGraph.MovingLabel.route
+            2 -> _nextNavigationRoute.value = QuizGraph.ResponseEntry.route
+            3 -> _nextNavigationRoute.value = QuizGraph.MultipleResponse.route
+        }
+    }
 
     fun startDragging() {
         _isCurrentlyDragging.value = true

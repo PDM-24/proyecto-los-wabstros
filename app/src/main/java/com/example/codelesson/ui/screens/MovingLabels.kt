@@ -46,6 +46,7 @@ import com.example.codelesson.ui.components.movinglabelcomponents.LabelEmpty
 import com.example.codelesson.ui.components.movinglabelcomponents.QuestionLabel
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.Hint
 import com.example.codelesson.ui.components.practicecomponents.PracticeButton
 import com.example.codelesson.ui.components.practicecomponents.ShortIndication
@@ -114,6 +115,8 @@ fun MovingLabels (
 
         val nextRoute by practiceViewModel.nextNavigationRoute.collectAsState()
         val index by practiceViewModel.index.collectAsState()
+        val endIndicator by practiceViewModel.endIndicator.collectAsState()
+        val questionsList by practiceViewModel.questionList.collectAsState()
 
         val backHandlerActive = remember {
             mutableStateOf(true)
@@ -225,12 +228,16 @@ fun MovingLabels (
             Spacer(modifier = Modifier.padding(24.dp))
             PracticeButton(name = "Seguir", enable = isSelected) {
                 if (VerifyingAnswer(text, correct)) {
-                    if(nextRoute != ""){
-                        navController.navigate(nextRoute)
+                    if(endIndicator == questionsList.size){
+                        navController.navigate(QuizGraph.LessonRecap.route)
+                    }else{
+                        if(nextRoute != ""){
+                            navController.navigate(nextRoute)
 
-                        practiceViewModel.resetNavRoute()
+                            practiceViewModel.resetNavRoute()
 
-                        practiceViewModel.addIndex()
+                            practiceViewModel.addIndex()
+                        }
                     }
                 }
                 else {

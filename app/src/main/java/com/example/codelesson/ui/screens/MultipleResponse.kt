@@ -37,6 +37,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -71,6 +72,8 @@ fun MultipleResponse (
 
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
     val index by viewModel.index.collectAsState()
+    val endIndicator by viewModel.endIndicator.collectAsState()
+    val questionsList by viewModel.questionList.collectAsState()
 
     val backHandlerActive = remember {
         mutableStateOf(true)
@@ -131,13 +134,16 @@ fun MultipleResponse (
                 if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
                     isIncorrect.value = false
 
+                    if(endIndicator == questionsList.size){
+                        navController.navigate(QuizGraph.LessonRecap.route)
+                    }else{
+                        if(nextRoute != ""){
+                            navController.navigate(nextRoute)
 
-                    if(nextRoute != ""){
-                        navController.navigate(nextRoute)
+                            viewModel.resetNavRoute()
 
-                        viewModel.resetNavRoute()
-
-                        viewModel.addIndex()
+                            viewModel.addIndex()
+                        }
                     }
                 }else{
                     isIncorrect.value = true

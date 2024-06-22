@@ -50,6 +50,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -104,6 +105,8 @@ fun ResponseEntry (
 
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
     val index by viewModel.index.collectAsState()
+    val endIndicator by viewModel.endIndicator.collectAsState()
+    val questionsList by viewModel.questionList.collectAsState()
 
     val backHandlerActive = remember {
         mutableStateOf(true)
@@ -240,7 +243,10 @@ fun ResponseEntry (
                                 focused,
                                 viewModel,
                                 nextRoute,
-                                navController
+                                navController,
+                                index,
+                                endIndicator,
+                                questionsList.size
                             )
                         else{
                             KeyboardFunctions.ClearFocus(focusManager, focused)
@@ -261,7 +267,10 @@ fun ResponseEntry (
                     focused,
                     viewModel,
                     nextRoute,
-                    navController
+                    navController,
+                    index,
+                    endIndicator,
+                    questionsList.size
                 )
             }
 
@@ -279,15 +288,22 @@ private fun responseHandler(
     focused: MutableState<Boolean>,
     viewModel: PracticeViewModel,
     nextRoute: String,
-    navController: NavHostController
+    navController: NavHostController,
+    index: Int,
+    endIndicator: Int,
+    listSize: Int
 ){
     if(viewModel.VerifyingAnswer(actualAnswer.value, correctAnswer)){
-        if(nextRoute != ""){
-            navController.navigate(nextRoute)
+        if(endIndicator == listSize){
+            navController.navigate(QuizGraph.LessonRecap.route)
+        }else{
+            if(nextRoute != ""){
+                navController.navigate(nextRoute)
 
-            viewModel.resetNavRoute()
+                viewModel.resetNavRoute()
 
-            viewModel.addIndex()
+                viewModel.addIndex()
+            }
         }
     }else{
         isIncorrect.value = true

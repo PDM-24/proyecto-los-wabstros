@@ -1,8 +1,5 @@
 package com.example.codelesson.ui.screens
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -183,5 +180,5 @@ private fun AnswOption(): List<String>{
     )
 }
 
-private fun VerifyingAnswer(answer: String, correctAnswer: String) =
+fun VerifyingAnswer(answer: String, correctAnswer: String) =
     answer == correctAnswer

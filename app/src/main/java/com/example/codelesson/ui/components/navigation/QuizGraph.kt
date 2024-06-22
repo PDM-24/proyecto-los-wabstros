@@ -30,11 +30,11 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.ResponseEntry.route) {
-            ResponseEntry(innerPadding, practiceViewModel)
+            ResponseEntry(innerPadding, practiceViewModel, navController)
         }
 
         composable(QuizGraph.MultipleResponse.route) {
-            MultipleResponse(innerPadding, practiceViewModel)
+            MultipleResponse(innerPadding, practiceViewModel, navController)
         }
 
         composable(QuizGraph.LessonRecap.route) {

@@ -37,8 +37,8 @@ import com.example.codelesson.ui.components.movinglabelcomponents.DragTarget
 import com.example.codelesson.ui.components.movinglabelcomponents.DropItem
 import com.example.codelesson.ui.components.movinglabelcomponents.LabelEmpty
 import com.example.codelesson.ui.components.movinglabelcomponents.QuestionLabel
-import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
-import com.example.codelesson.ui.components.practicecomponents.CodeBlock
+import com.example.codelesson.ui.components.practicecomponents.Hint
+import com.example.codelesson.ui.components.practicecomponents.PracticeButton
 import com.example.codelesson.ui.components.practicecomponents.ShortIndication
 import com.example.codelesson.util.PracticeViewModel
 
@@ -53,13 +53,14 @@ fun MovingLabels (
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        CodeBlock {
-            BlackBoxText(text = "INT ES UNA VARIABLE DE TIPO ENTERO CON UN RANGO DE -32768 A 32767.")
-        }
+        Hint(
+            hint = "INT ES UNA VARIABLE DE TIPO ENTERO CON UN RANGO DE -32768 A 32767.",
+            isIncorrect = false
+        )
         ShortIndication(
             indication = "Encuentre la definicion"
         )
-        //Obtiene el ancho del dispositivo
+        //Obtaining the width of the dispositive
         val screenWidth = LocalConfiguration.current.screenWidthDp
         var text by remember {
             mutableStateOf("")
@@ -68,7 +69,8 @@ fun MovingLabels (
 
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(top = 12.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             QuestionLabel("INT")
@@ -111,7 +113,6 @@ fun MovingLabels (
                 }
             }
         }
-        Spacer(modifier = Modifier.padding(24.dp))
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -121,7 +122,6 @@ fun MovingLabels (
                     .fillMaxWidth()
                     .padding(28.dp),
                 columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(list) {
                     if ((it.answer != text) && (it != list[2])) {
@@ -137,7 +137,7 @@ fun MovingLabels (
                 }
             }
             //Se renderiza fuera del verticalgrid para poder centrar el tercer elememto
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 if (list[2].answer != text) {
                     DragTarget(
                         dataDrop = list[2],
@@ -146,6 +146,10 @@ fun MovingLabels (
                         AnswerLabel(text = list[2].answer)
                     }
                 }
+            }
+            Spacer(modifier = Modifier.padding(24.dp))
+            PracticeButton(name = "Seguir", enable = true) {
+
             }
         }
     }

@@ -73,13 +73,19 @@ class PracticeViewModel : ViewModel() {
     private val _index = MutableStateFlow(0)
     val index = _index.asStateFlow()
 
+    private val _endIndicator = MutableStateFlow(0)
+    val endIndicator = _endIndicator.asStateFlow()
+
     fun resetIndex(){
         _index.value = 0
     }
 
     fun addIndex(){
-        if(_questionList.value.size - 1 > _index.value)
+        if(_questionList.value.size - 1 > _index.value){
             _index.value += 1
+        }
+
+        _endIndicator.value += 1
     }
 
     fun resetNavRoute() {

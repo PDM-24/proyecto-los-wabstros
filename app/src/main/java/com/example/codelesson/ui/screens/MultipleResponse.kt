@@ -1,5 +1,8 @@
 package com.example.codelesson.ui.screens
 
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -16,18 +19,25 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import com.example.codelesson.ui.components.navigation.Graph
+import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -52,9 +62,41 @@ private val changeAnswer: MutableState<Boolean> = mutableStateOf(false)
 private val thereIsAnAnswer: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
-fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel){
+fun MultipleResponse (
+    innerPadding: PaddingValues,
+    viewModel: PracticeViewModel,
+    navController: NavHostController
+){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
     val correctAnswer = "IMPRIME 01234"
+
+    val nextRoute by viewModel.nextNavigationRoute.collectAsState()
+    val index by viewModel.index.collectAsState()
+
+    val backHandlerActive = remember {
+        mutableStateOf(true)
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        viewModel.resetNavRoute()
+    }
+
+    if(nextRoute == "")
+        viewModel.verifyTypeOfQuestion(index)
+
+
+    BackHandler{
+        if(backHandlerActive.value){
+            backHandlerActive.value = false
+            Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
+        }else{
+            navController.navigate(HomeGraph.Home.route){
+                popUpTo(Graph.HOME.graph)
+            }
+        }
+    }
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -89,6 +131,15 @@ fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel)
             PracticeButton(name = "Seguir", enable = thereIsAnAnswer.value) {
                 if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
                     isIncorrect.value = false
+
+                    Log.i("MIRAAA", "la ruta: $nextRoute")
+
+                    if(nextRoute != ""){
+                        Log.i("ENTRAAA", "la ruta: $nextRoute")
+                        navController.navigate(nextRoute)
+
+                        viewModel.resetNavRoute()
+                    }
                 }else{
                     isIncorrect.value = true
 

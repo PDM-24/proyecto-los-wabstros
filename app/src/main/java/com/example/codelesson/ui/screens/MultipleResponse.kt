@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.navigation.QuizGraph
@@ -68,12 +69,17 @@ fun MultipleResponse (
     navController: NavHostController
 ){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
-    val correctAnswer = "IMPRIME 01234"
 
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
     val index by viewModel.index.collectAsState()
     val endIndicator by viewModel.endIndicator.collectAsState()
     val questionsList by viewModel.questionList.collectAsState()
+
+    val correctAnswer = questionsList[endIndicator-1].correctAnswer
+
+    val filterList = remember {
+        mutableStateOf(emptyList<String>())
+    }
 
     val backHandlerActive = remember {
         mutableStateOf(true)
@@ -83,6 +89,12 @@ fun MultipleResponse (
 
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
+
+        filterList.value = listOf(
+            questionsList[endIndicator-1].incorrectAnswers[0],
+            questionsList[endIndicator-1].incorrectAnswers[1],
+            questionsList[endIndicator-1].correctAnswer
+        ).shuffled()
     }
 
     if(nextRoute == "")
@@ -108,22 +120,19 @@ fun MultipleResponse (
     ) {
         item {
             Hint(
-                hint = "El cout permite mostrar por pantalla cualquier tipo de dato.",
+                hint = questionsList[endIndicator-1].hint,
                 isIncorrect = isIncorrect.value
             )
             ShortIndication(indication = "escoge la opción correcta")
             DetailedIndication(indication = "que hace el codigo?")
 
             CodeBlock {
-                BlackBoxText(text = "int NUMBERS = 01234;\n" +
-                        "\n" +
-                        "cout << NUMBERS;")
-
+                BlackBoxText(text = questionsList[endIndicator-1].code)
             }
 
             Spacer(modifier = Modifier.padding(2.dp))
 
-            AnswOption().forEach {
+            filterList.value.forEach {
                 BttnMultChoice(answer = it, correctAnswer = correctAnswer)
                 Spacer(modifier = Modifier.padding(5.dp))
             }
@@ -131,7 +140,7 @@ fun MultipleResponse (
             Spacer(modifier = Modifier.padding(3.dp))
 
             PracticeButton(name = "Seguir", enable = thereIsAnAnswer.value) {
-                if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
+                if(viewModel.VerifyingAnswer(actualAnswer.value, correctAnswer)){
                     isIncorrect.value = false
 
                     if(endIndicator == questionsList.size){
@@ -231,12 +240,14 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
     }
 }
 
-private fun AnswOption(): List<String>{
-    return listOf(
-        "LEE LA VARIABLE NUMBERS",
-        "GUARDA NUMBERS EN COUT",
-        "IMPRIME 01234"
-    )
+private fun AnswOption(incorrectAnsw: List<String>, correctAnswer: String): List<String>{
+    val list = listOf(
+        incorrectAnsw[0],
+        incorrectAnsw[1],
+        correctAnswer
+    ).shuffled()
+
+    return list
 }
 
 fun VerifyingAnswer(answer: String, correctAnswer: String) =

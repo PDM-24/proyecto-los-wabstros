@@ -44,7 +44,7 @@ fun Home(
                    it.name,
                ) {
                    viewModel.setTitle(it.name.uppercase())
-                   navController.navigate(QuizGraph.MovingLabel.route)
+                   navController.navigate(QuizGraph.Theory.route)
                }
            }
        }

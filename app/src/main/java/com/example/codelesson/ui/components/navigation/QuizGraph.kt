@@ -26,7 +26,7 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.MovingLabel.route) {
-            MainMovingLabel(innerPadding = innerPadding, practiceViewModel = practiceViewModel)
+            MainMovingLabel(innerPadding = innerPadding, practiceViewModel = practiceViewModel, navController)
         }
 
         composable(QuizGraph.ResponseEntry.route) {

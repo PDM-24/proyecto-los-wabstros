@@ -286,6 +286,8 @@ private fun responseHandler(
             navController.navigate(nextRoute)
 
             viewModel.resetNavRoute()
+
+            viewModel.addIndex()
         }
     }else{
         isIncorrect.value = true

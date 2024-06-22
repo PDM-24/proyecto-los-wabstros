@@ -131,13 +131,13 @@ fun MultipleResponse (
                 if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
                     isIncorrect.value = false
 
-                    Log.i("MIRAAA", "la ruta: $nextRoute")
 
                     if(nextRoute != ""){
-                        Log.i("ENTRAAA", "la ruta: $nextRoute")
                         navController.navigate(nextRoute)
 
                         viewModel.resetNavRoute()
+
+                        viewModel.addIndex()
                     }
                 }else{
                     isIncorrect.value = true

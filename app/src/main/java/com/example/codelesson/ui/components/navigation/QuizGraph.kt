@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.codelesson.ui.screens.LessonRecap
-import com.example.codelesson.ui.screens.MovingLabels
+import com.example.codelesson.ui.screens.MainMovingLabel
 import com.example.codelesson.ui.screens.MultipleResponse
 import com.example.codelesson.ui.screens.ResponseEntry
 import com.example.codelesson.ui.screens.Theory
@@ -26,7 +26,7 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.MovingLabel.route) {
-            MovingLabels(innerPadding, practiceViewModel)
+            MainMovingLabel(innerPadding = innerPadding, practiceViewModel = practiceViewModel)
         }
 
         composable(QuizGraph.ResponseEntry.route) {

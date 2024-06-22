@@ -1,5 +1,6 @@
 package com.example.codelesson.util
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.codelesson.model.Practice
@@ -77,7 +78,7 @@ class PracticeViewModel : ViewModel() {
     }
 
     fun addIndex(){
-        if(_questionList.value.size > _index.value)
+        if(_questionList.value.size - 1 > _index.value)
             _index.value += 1
     }
 

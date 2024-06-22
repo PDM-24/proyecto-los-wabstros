@@ -2,6 +2,8 @@ package com.example.codelesson.util
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.codelesson.model.Practice
+import com.example.codelesson.model.Question
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -12,6 +14,53 @@ class PracticeViewModel : ViewModel() {
     //Para checar que una label esta siendo arrastrado
     private val _isCurrentlyDragging = MutableLiveData(false)
     private var isCurrentlyDragging = _isCurrentlyDragging
+
+    private val _practiceList = MutableStateFlow(
+        Practice(
+            theme = "Estructura básica",
+            recap = "La librería esencial para usar input y output. Además del namespace std, que permite facilitar la escritura del código y como es necesario declarar la función principal.",
+            lesson = "Cuando programas en C++, es necesario empezar usando la librería estándar iostream: #include <iostream>. Luego debes incluir el namespace principal: using namespace std; . Y declaras la función principal: \\n\n" +
+                    "int main (){\n" +
+                    "\t\treturn 0;\n" +
+                    "}\n" +
+                    "\n" +
+                    "El return 0 indica que la función retorna 0, todas las funciones deben retornar algo.\n",
+            questions = listOf(
+                Question(
+                    incorrectAnswers = listOf(
+                        "librería",
+                        "namespace"
+                    ),
+                    code = "",
+                    hint = "Dentro va un return 0",
+                    type = 1,
+                    question = "int main()",
+                    correctAnswer = "función principal"
+                ),
+                Question(
+                    incorrectAnswers = emptyList(),
+                    code = "#include<$$>",
+                    hint = "La librería lleva stream en el nombre",
+                    type = 2,
+                    question = "Declara la librería estándar",
+                    correctAnswer = "iostream"
+                ),
+                Question(
+                    incorrectAnswers = listOf(
+                        "Declara una variable",
+                        "Declara una librería"
+                    ),
+                    code = "return 0;",
+                    hint = "Es una traducción literal",
+                    type = 3,
+                    question = "",
+                    correctAnswer = "retorna 0"
+                )
+            )
+        )
+    )
+
+    val practiceList = _practiceList.asStateFlow()
 
     fun startDragging() {
         _isCurrentlyDragging.value = true

@@ -71,15 +71,6 @@ fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                 .padding(top = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-//            Button(
-//                modifier = Modifier
-//                    .width(150.dp)
-//                    .height(150.dp)
-//                    .padding(top = 20.dp),
-//                onClick = { }
-//            ) {
-//                Text(text = "profile photo")
-//            }
             Image(
                 modifier = Modifier
                     .width(150.dp)
@@ -222,11 +213,15 @@ fun BarraDePorcentaje(porcentaje: Float) {
 fun profilBbutton(name : String, onClick: () -> Unit ) {
     Button(
         modifier = Modifier
-            .fillMaxWidth(),
+            .width(200.dp),
         colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple1, contentColor = Color.White),
         onClick = { onClick() }
     ) {
-        Text(text = name)
+        Text(
+            text = name,
+            fontFamily = audioWide,
+            fontSize = 13.sp
+        )
 
     }
 }

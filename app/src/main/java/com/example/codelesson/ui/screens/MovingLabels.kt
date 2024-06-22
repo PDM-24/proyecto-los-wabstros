@@ -149,7 +149,7 @@ fun MovingLabels (
             }
             Spacer(modifier = Modifier.padding(24.dp))
             PracticeButton(name = "Seguir", enable = true) {
-
+                
             }
         }
     }

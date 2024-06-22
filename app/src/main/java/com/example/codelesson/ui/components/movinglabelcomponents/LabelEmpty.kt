@@ -14,7 +14,7 @@ fun LabelEmpty() {
     OutlinedCard(
         modifier = Modifier
             .width(135.dp)
-            .height(40.dp)
+            .height(44.dp)
     ) {
 
     }

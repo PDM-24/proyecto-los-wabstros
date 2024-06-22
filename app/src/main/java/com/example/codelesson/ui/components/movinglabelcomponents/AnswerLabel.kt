@@ -13,15 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.codelesson.ui.theme.ButtonPurple1
-import com.example.codelesson.ui.theme.poppins
+import com.example.codelesson.ui.theme.audioWide
 
 @Composable
 fun AnswerLabel(text: String) {
     Card(
         modifier = Modifier
             .width(136.dp)
-            .height(41.dp)
+            .height(45.dp)
     ) {
         Box(
             modifier = Modifier
@@ -31,8 +32,9 @@ fun AnswerLabel(text: String) {
         ) {
             Text(
                 text = text,
-                fontFamily = poppins,
+                fontFamily = audioWide,
                 fontWeight = FontWeight.W400,
+                fontSize = 14.sp
             )
         }
     }

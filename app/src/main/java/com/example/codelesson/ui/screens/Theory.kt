@@ -34,10 +34,15 @@ fun Theory(
     navController: NavHostController,
     viewModel: PracticeViewModel
 ) {
-    val titleTheory by viewModel.titleTopBar.collectAsState()
     val theory = remember {
         mutableStateOf(viewModel.practiceList.value.lesson)
     }
+    val nextRoute by viewModel.nextNavigationRoute.collectAsState()
+
+    if(nextRoute == "")
+        viewModel.verifyTypeOfQuestion(0)
+
+    viewModel.resetNavRoute()
 
     Column(
         modifier = Modifier
@@ -63,9 +68,12 @@ fun Theory(
 
         ){
             profilBbutton(name = "SEGUIR") {
+                if(nextRoute != ""){
+                    navController.navigate(nextRoute)
 
+                    viewModel.resetNavRoute()
+                }
             }
-
 
         }
     }

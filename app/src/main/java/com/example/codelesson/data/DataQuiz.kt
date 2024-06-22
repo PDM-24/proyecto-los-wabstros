@@ -9,11 +9,11 @@ fun quizList() : List<QuizData> {
     return listOf(
         QuizData(
             "Question 1",
-            "Numero\nDecimal"
+            "Numero Decimal"
         ),
         QuizData(
             "Question 2",
-            "Numero\nEntero"
+            "Numero Entero"
         ),
         QuizData(
             "Question 3",

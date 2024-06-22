@@ -1,6 +1,5 @@
 package com.example.codelesson.ui.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
@@ -234,5 +233,5 @@ private fun AnswOption(): List<String>{
     )
 }
 
-private fun VerifyingAnswer(answer: String, correctAnswer: String) =
+fun VerifyingAnswer(answer: String, correctAnswer: String) =
     answer == correctAnswer

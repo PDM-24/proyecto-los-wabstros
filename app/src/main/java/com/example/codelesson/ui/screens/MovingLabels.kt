@@ -27,9 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.example.codelesson.data.QuizData
 import com.example.codelesson.data.quizList
 import com.example.codelesson.ui.components.movinglabelcomponents.AnswerLabel
@@ -40,7 +42,13 @@ import com.example.codelesson.ui.components.movinglabelcomponents.QuestionLabel
 import com.example.codelesson.ui.components.practicecomponents.Hint
 import com.example.codelesson.ui.components.practicecomponents.PracticeButton
 import com.example.codelesson.ui.components.practicecomponents.ShortIndication
+import com.example.codelesson.ui.theme.ButtonPurple1
+import com.example.codelesson.ui.theme.DarkRed
+import com.example.codelesson.ui.theme.Red
+import com.example.codelesson.util.AnimatingColors
 import com.example.codelesson.util.PracticeViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun MovingLabels (
@@ -53,9 +61,17 @@ fun MovingLabels (
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
+        val correct = "Numero Entero"
+        var isSelected by remember {
+            mutableStateOf(false)
+        }
+        var isCorrect by remember {
+            mutableStateOf(true)
+        }
+
         Hint(
             hint = "INT ES UNA VARIABLE DE TIPO ENTERO CON UN RANGO DE -32768 A 32767.",
-            isIncorrect = false
+            isIncorrect = !isCorrect
         )
         ShortIndication(
             indication = "Encuentre la definicion"
@@ -66,6 +82,27 @@ fun MovingLabels (
             mutableStateOf("")
         }
         val list = quizList()
+
+        val animatedColorSelectionContainer =
+            if (isCorrect)
+                ButtonPurple1
+            else
+                Red
+
+        val animatedColorSelectionBorder =
+            if (isCorrect)
+                ButtonPurple1
+            else
+                DarkRed
+
+        val colorToDefault = ButtonPurple1
+        val borderToDefault = ButtonPurple1
+
+        val animatedColorContainer = AnimatingColors.animatingColor(color = animatedColorSelectionContainer)
+        val animatedColorBorder = AnimatingColors.animatingColor(color = animatedColorSelectionBorder)
+
+        val colorDefault = AnimatingColors.animatingColor(color = colorToDefault)
+        val borderDefault = AnimatingColors.animatingColor(color = borderToDefault)
 
         Row(
             modifier = Modifier
@@ -83,6 +120,7 @@ fun MovingLabels (
                 if (quizItem != null) {
                     LaunchedEffect(quizItem) {
                         text = quizItem.answer
+                        isSelected = true
                     }
                 }
                 //Verifica si el elemento arrastrado esta dentro del area de drop item
@@ -98,7 +136,7 @@ fun MovingLabels (
                     }
                 } else {
                     if(text != ""){
-                        AnswerLabel(text)
+                        AnswerLabel(text, animatedColorContainer, animatedColorBorder)
                     }
                     else{
                         Box(
@@ -131,7 +169,7 @@ fun MovingLabels (
                             viewModel = practiceViewModel
                         ) {
                             //Contenido del elemento arrastrable
-                            AnswerLabel(text = it.answer)
+                            AnswerLabel(text = it.answer, colorDefault, borderDefault)
                         }
                     }
                 }
@@ -143,13 +181,25 @@ fun MovingLabels (
                         dataDrop = list[2],
                         viewModel = practiceViewModel
                     ) {
-                        AnswerLabel(text = list[2].answer)
+                        AnswerLabel(text = list[2].answer, colorDefault, borderDefault)
                     }
                 }
             }
+            val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
             Spacer(modifier = Modifier.padding(24.dp))
-            PracticeButton(name = "Seguir", enable = true) {
-                
+            PracticeButton(name = "Seguir", enable = isSelected) {
+                if (VerifyingAnswer(text, correct)) {
+                    //AQUI HACE LA NAVEGACION
+                }
+                else {
+                    lifeCycleScope.launch {
+                        isCorrect = false
+                        isSelected = false
+                        delay(600)
+                        text = ""
+                        isCorrect = true
+                    }
+                }
             }
         }
     }

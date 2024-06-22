@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.codelesson.data.getName
 import com.example.codelesson.ui.components.homecomponents.ButtonNavigate
-import com.example.codelesson.ui.components.navigation.Graph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.theme.CodeLessonTheme
 import com.example.codelesson.util.PracticeViewModel
 
@@ -43,8 +43,8 @@ fun Home(
                        .height(65.dp),
                    it.name,
                ) {
-                   viewModel.setTitle(it.name)
-                   navController.navigate(Graph.QUIZ.graph)
+                   viewModel.setTitle(it.name.uppercase())
+                   navController.navigate(QuizGraph.MovingLabel.route)
                }
            }
        }

@@ -76,13 +76,9 @@ class PracticeViewModel : ViewModel() {
         _index.value = 0
     }
 
-    fun restIndex(){
-        _index.value = _index.value--
-    }
-
     fun addIndex(){
         if(_questionList.value.size > _index.value)
-            _index.value = _index.value++
+            _index.value += 1
     }
 
     fun resetNavRoute() {

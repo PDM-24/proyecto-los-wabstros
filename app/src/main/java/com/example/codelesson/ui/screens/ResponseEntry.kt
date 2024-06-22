@@ -50,6 +50,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -90,7 +91,6 @@ fun ResponseEntry (
     val scrollState = rememberLazyListState()
 
     val focusManager = LocalFocusManager.current
-    val correctAnswer = ">"
 
     val animatedColorContainer = AnimatingColors.animatingColor(
         inicialColor = FormWhite,
@@ -100,10 +100,16 @@ fun ResponseEntry (
 
     val code = "if(n $$ 3){\n\n...\n\n}"
 
-    val splitedCode = code.split("$$")
 
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
     val index by viewModel.index.collectAsState()
+    val endIndicator by viewModel.endIndicator.collectAsState()
+    val questionsList by viewModel.questionList.collectAsState()
+
+    val splitedCode = remember {
+        mutableStateOf(listOf("", ""))
+    }
+    val correctAnswer = questionsList[endIndicator-1].correctAnswer
 
     val backHandlerActive = remember {
         mutableStateOf(true)
@@ -113,6 +119,8 @@ fun ResponseEntry (
 
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
+
+        splitedCode.value = questionsList[endIndicator-1].code.split("$$")
     }
 
     if(nextRoute == "")
@@ -157,7 +165,7 @@ fun ResponseEntry (
         state = scrollState
     ) {
         item(0) {
-            Hint(hint = "El operador de lógico > permite saber cuando un número es mayor o igual a otro.",
+            Hint(hint = questionsList[endIndicator-1].hint,
                 isIncorrect = isIncorrect.value)
 
             ShortIndication(indication = "Completa con la respuesta correcta")
@@ -172,7 +180,7 @@ fun ResponseEntry (
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        BlackBoxText(text = splitedCode[0])
+                        BlackBoxText(text = splitedCode.value[0])
 
                         Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
@@ -189,7 +197,7 @@ fun ResponseEntry (
 
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
-                    BlackBoxText(text = splitedCode[1])
+                    BlackBoxText(text = splitedCode.value[1])
                 }
             }
 
@@ -240,7 +248,10 @@ fun ResponseEntry (
                                 focused,
                                 viewModel,
                                 nextRoute,
-                                navController
+                                navController,
+                                index,
+                                endIndicator,
+                                questionsList.size
                             )
                         else{
                             KeyboardFunctions.ClearFocus(focusManager, focused)
@@ -261,7 +272,10 @@ fun ResponseEntry (
                     focused,
                     viewModel,
                     nextRoute,
-                    navController
+                    navController,
+                    index,
+                    endIndicator,
+                    questionsList.size
                 )
             }
 
@@ -279,13 +293,22 @@ private fun responseHandler(
     focused: MutableState<Boolean>,
     viewModel: PracticeViewModel,
     nextRoute: String,
-    navController: NavHostController
+    navController: NavHostController,
+    index: Int,
+    endIndicator: Int,
+    listSize: Int
 ){
     if(viewModel.VerifyingAnswer(actualAnswer.value, correctAnswer)){
-        if(nextRoute != ""){
-            navController.navigate(nextRoute)
+        if(endIndicator == listSize){
+            navController.navigate(QuizGraph.LessonRecap.route)
+        }else{
+            if(nextRoute != ""){
+                navController.navigate(nextRoute)
 
-            viewModel.resetNavRoute()
+                viewModel.resetNavRoute()
+
+                viewModel.addIndex()
+            }
         }
     }else{
         isIncorrect.value = true

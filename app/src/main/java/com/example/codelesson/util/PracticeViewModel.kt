@@ -78,6 +78,7 @@ class PracticeViewModel : ViewModel() {
 
     fun resetIndex(){
         _index.value = 0
+        _endIndicator.value = 0
     }
 
     fun addIndex(){

@@ -48,6 +48,7 @@ fun Theory(
 
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
+        viewModel.resetIndex()
     }
 
     Column(

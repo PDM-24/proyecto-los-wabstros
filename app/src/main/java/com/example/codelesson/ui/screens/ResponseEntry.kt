@@ -1,15 +1,10 @@
 package com.example.codelesson.ui.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -46,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
@@ -98,9 +92,6 @@ fun ResponseEntry (
         condition = isIncorrect
     )
 
-    val code = "if(n $$ 3){\n\n...\n\n}"
-
-
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
     val index by viewModel.index.collectAsState()
     val endIndicator by viewModel.endIndicator.collectAsState()
@@ -121,6 +112,9 @@ fun ResponseEntry (
         viewModel.resetNavRoute()
 
         splitedCode.value = questionsList[endIndicator-1].code.split("$$")
+
+        isIncorrect.value = false
+        actualAnswer.value = ""
     }
 
     if(nextRoute == "")

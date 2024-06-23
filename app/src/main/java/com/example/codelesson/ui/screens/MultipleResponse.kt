@@ -2,9 +2,6 @@ package com.example.codelesson.ui.screens
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
-import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.navigation.QuizGraph
@@ -95,6 +91,11 @@ fun MultipleResponse (
             questionsList[endIndicator-1].incorrectAnswers[1],
             questionsList[endIndicator-1].correctAnswer
         ).shuffled()
+
+        isIncorrect.value = false
+        actualAnswer.value = ""
+        changeAnswer.value = false
+        thereIsAnAnswer.value = false
     }
 
     if(nextRoute == "")
@@ -239,16 +240,3 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
         )
     }
 }
-
-private fun AnswOption(incorrectAnsw: List<String>, correctAnswer: String): List<String>{
-    val list = listOf(
-        incorrectAnsw[0],
-        incorrectAnsw[1],
-        correctAnswer
-    ).shuffled()
-
-    return list
-}
-
-fun VerifyingAnswer(answer: String, correctAnswer: String) =
-    answer == correctAnswer

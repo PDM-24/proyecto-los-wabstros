@@ -227,7 +227,7 @@ fun MovingLabels (
             val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
             Spacer(modifier = Modifier.padding(24.dp))
             PracticeButton(name = "Seguir", enable = isSelected) {
-                if (VerifyingAnswer(text, correct)) {
+                if (practiceViewModel.VerifyingAnswer(text, correct)) {
                     if(endIndicator == questionsList.size){
                         navController.navigate(QuizGraph.LessonRecap.route)
                     }else{

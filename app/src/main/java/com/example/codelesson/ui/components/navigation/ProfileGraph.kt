@@ -20,7 +20,7 @@ fun NavGraphBuilder.profileGraph(
         startDestination = ProfileGraph.Profile.route
     ) {
         composable(ProfileGraph.Profile.route) {
-            Profile(innerPadding, userViewModel)
+            Profile(innerPadding, userViewModel, navController)
         }
 
         composable(ProfileGraph.EditProfile.route) {

@@ -95,6 +95,11 @@ fun MultipleResponse (
             questionsList[endIndicator-1].incorrectAnswers[1],
             questionsList[endIndicator-1].correctAnswer
         ).shuffled()
+
+        isIncorrect.value = false
+        actualAnswer.value = ""
+        changeAnswer.value = false
+        thereIsAnAnswer.value = false
     }
 
     if(nextRoute == "")
@@ -239,16 +244,3 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
         )
     }
 }
-
-private fun AnswOption(incorrectAnsw: List<String>, correctAnswer: String): List<String>{
-    val list = listOf(
-        incorrectAnsw[0],
-        incorrectAnsw[1],
-        correctAnswer
-    ).shuffled()
-
-    return list
-}
-
-fun VerifyingAnswer(answer: String, correctAnswer: String) =
-    answer == correctAnswer

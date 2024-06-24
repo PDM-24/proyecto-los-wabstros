@@ -24,15 +24,14 @@ import com.example.codelesson.ui.theme.poppins
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignupTextField(
-    onValueChange: (String) -> Unit = {},
+    onValueChange: (String) -> Unit,
     hint: String,
     value: String,
 ){
-    var varible by remember { mutableStateOf("") }
 
     TextField(
-        value = varible,
-        onValueChange = { varible = it },
+        value = value,
+        onValueChange = onValueChange,
         placeholder = {
             Text(text = hint,
                 style = TextStyle(

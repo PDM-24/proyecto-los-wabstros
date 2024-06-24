@@ -14,6 +14,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ApiService {
+    //Makes the login request and returns a token which can be used to bring the user's data
     @POST(Constants.AUTH_CONSTANT + Constants.LOG_USER)
     suspend fun auth(
         @Body userDataLogin: UserDataLogin

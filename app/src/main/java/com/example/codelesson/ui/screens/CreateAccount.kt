@@ -1,24 +1,15 @@
 package com.example.codelesson.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,14 +18,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.codelesson.R
+import com.example.codelesson.data.models.UserData
+import com.example.codelesson.data.remote.api.ApiClient
 import com.example.codelesson.ui.components.logincomponents.SignupTextField
 import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.ui.theme.poppins
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun CreateAccount(
     navController: NavHostController
 ) {
+    val name = remember { mutableStateOf("") }
+    val lastName = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val confirmPassword = remember { mutableStateOf("") }
+
+    val context = LocalContext.current
+
     Surface(
         color = Color(0xFF1E1E1E),
         modifier = Modifier.fillMaxSize()
@@ -66,7 +68,7 @@ fun CreateAccount(
                         .padding(bottom = 10.dp)
                 )
 
-
+/*
                 SignupTextField(hint = "Nombre", value = "" )
 
                 SignupTextField(hint = "Apellido", value = "" )
@@ -76,11 +78,25 @@ fun CreateAccount(
                 SignupTextField(hint = "Contraseña", value = "" )
 
                 SignupTextField(hint = "Confirmar contraseña", value = "" )
+                */
+
+                SignupTextField(hint = "Nombre", value = name.value, onValueChange = { name.value = it })
+                SignupTextField(hint = "Apellido", value = lastName.value, onValueChange = { lastName.value = it })
+                SignupTextField(hint = "Correo electrónico", value = email.value, onValueChange = { email.value = it })
+                SignupTextField(hint = "Contraseña", value = password.value, onValueChange = { password.value = it })
+                SignupTextField(hint = "Confirmar contraseña", value = confirmPassword.value, onValueChange = { confirmPassword.value = it })
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = { navController.navigate("login") },
+                    //onClick = { navController.navigate("login") },
+                    onClick = {
+                        if (password.value == confirmPassword.value) {
+                            createUser(name.value, lastName.value, email.value, password.value, navController)
+                        } else {
+                            Toast.makeText(context, context.resources.getString(R.string.signup_toast_password), Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF572970)
@@ -90,7 +106,6 @@ fun CreateAccount(
                         .height(52.dp)
                         .padding(start = 4.dp, end = 10.dp)
                 ) {
-
                     Text(
                         text = "CREAR CUENTA",
                         style = TextStyle(
@@ -130,5 +145,29 @@ fun CreateAccount(
             }
         }
     }
-    
+}
+
+fun createUser(
+    name: String,
+    lastName: String,
+    email: String,
+    password: String,
+    navController: NavHostController
+) {
+    val userData = UserData(
+        name = name,
+        lastName = lastName,
+        email = email,
+        password = password
+    )
+
+    runBlocking {
+        try {
+            ApiClient.ApiClient.postUser(userData)
+            println("Usuario guardado exitosamente")
+            navController.navigate("login")
+        } catch (e: Exception) {
+            println("Error al guardar usuario: ${e.message}")
+        }
+    }
 }

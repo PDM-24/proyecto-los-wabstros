@@ -2,7 +2,7 @@ package com.example.codelesson.data.models
 
 data class DataLesson(
     val message: String,
-    val data: TitleLesson
+    val data: List<TitleLesson>
 )
 
 data class TitleLesson(

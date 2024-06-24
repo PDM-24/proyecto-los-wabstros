@@ -1,7 +1,7 @@
 package com.example.codelesson.data.remote.api
 
 import com.example.codelesson.data.models.DataLesson
-import com.example.codelesson.data.models.LessonData
+import com.example.codelesson.data.models.LessonResponse
 import com.example.codelesson.data.models.Profile
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.data.models.UserDataLogin
@@ -10,7 +10,6 @@ import com.example.codelesson.util.Constants
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ApiService {
@@ -29,9 +28,8 @@ interface ApiService {
     suspend fun postUser(@Body userData: UserData)
 
     @GET(Constants.LESSON_CONSTANT + Constants.GET_LESSON_TITLE)
-    suspend fun getLessonTitle() : List<DataLesson>
+    suspend fun getLessonTitle() : DataLesson
 
-    @Headers("Cache-Control: max-age=640000")
     @GET(Constants.LESSON_CONSTANT + Constants.GET_LESSON)
-    suspend fun getLessonById(id: String) : LessonData
+    suspend fun getLessonById(id: String) : LessonResponse
 }

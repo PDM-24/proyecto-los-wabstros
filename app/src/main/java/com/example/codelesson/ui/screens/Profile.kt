@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.codelesson.R
+import com.example.codelesson.ui.components.navigation.Graph
+import com.example.codelesson.ui.components.navigation.LoginGraph
 import com.example.codelesson.ui.components.navigation.ProfileGraph
 import com.example.codelesson.ui.components.profileComponents.dataLetters
 import com.example.codelesson.ui.components.profileComponents.mainLetters
@@ -149,8 +151,12 @@ fun Profile (
                         navController.navigate(ProfileGraph.Security.route)
                     }
                     profilBbutton(name = "CERRAR SESION") {
-//navegacion a login
-                        //navController.navigate(ProfileGraph.Login.route)
+                        viewModel.deleteToke()
+                        navController.navigate(LoginGraph.Login.route) {
+                            popUpTo(LoginGraph.Login.route)
+                        }
+
+
                     }
                 }
                 Column (

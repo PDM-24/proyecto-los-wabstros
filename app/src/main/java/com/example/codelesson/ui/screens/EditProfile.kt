@@ -118,7 +118,7 @@ fun EditProfile(
                     message(context, "Datos actualizados")
                     viewModel.getUser()
                     delay(500)
-                    navController.navigate("Profile")
+                    navController.popBackStack()
                 }
             } else {
                 emptyFieldText.value = false

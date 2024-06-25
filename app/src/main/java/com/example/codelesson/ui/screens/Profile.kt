@@ -181,7 +181,7 @@ fun Profile (
                         )
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.edit_pen),
-                            contentDescription = "edit_pen",
+                            contentDescription = "edit",
                             tint =  FormWhite
                         )
                     }

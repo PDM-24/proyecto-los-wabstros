@@ -1,6 +1,8 @@
 package com.example.codelesson.ui.components.profileComponents
 
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -59,4 +61,8 @@ fun secondaryLetters(name : String) {
 @Preview
 fun mainLettersPreview() {
     mainLetters("Hello")
+}
+
+fun message(context: Context, mensaje: String) {
+    Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
 }

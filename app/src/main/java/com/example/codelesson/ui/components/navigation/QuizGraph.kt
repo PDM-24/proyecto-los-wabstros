@@ -38,7 +38,7 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.LessonRecap.route) {
-            LessonRecap(innerPadding, practiceViewModel)
+            LessonRecap(innerPadding, practiceViewModel, navController)
         }
     }
 }

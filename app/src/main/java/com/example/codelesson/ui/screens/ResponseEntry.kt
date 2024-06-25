@@ -1,13 +1,10 @@
 package com.example.codelesson.ui.screens
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,12 +24,15 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
@@ -41,7 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.codelesson.ui.components.navigation.Graph
+import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -67,7 +70,11 @@ private val actualAnswer: MutableState<String> = mutableStateOf("")
 private val isIncorrect: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
-fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
+fun ResponseEntry (
+    innerPadding: PaddingValues,
+    viewModel: PracticeViewModel,
+    navController: NavHostController
+){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
 
     val focused = remember {
@@ -78,7 +85,6 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
     val scrollState = rememberLazyListState()
 
     val focusManager = LocalFocusManager.current
-    val correctAnswer = ">"
 
     val animatedColorContainer = AnimatingColors.animatingColor(
         inicialColor = FormWhite,
@@ -86,9 +92,45 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
         condition = isIncorrect
     )
 
-    val code = "if(n $$ 3){\n\n...\n\n}"
+    val nextRoute by viewModel.nextNavigationRoute.collectAsState()
+    val index by viewModel.index.collectAsState()
+    val endIndicator by viewModel.endIndicator.collectAsState()
+    val questionsList by viewModel.questionList.collectAsState()
 
-    val splitedCode = code.split("$$")
+    val splitedCode = remember {
+        mutableStateOf(listOf("", ""))
+    }
+    val correctAnswer = questionsList[endIndicator-1].correctAnswer
+
+    val backHandlerActive = remember {
+        mutableStateOf(true)
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        viewModel.resetNavRoute()
+
+        splitedCode.value = questionsList[endIndicator-1].code.split("$$")
+
+        isIncorrect.value = false
+        actualAnswer.value = ""
+    }
+
+    if(nextRoute == "")
+        viewModel.verifyTypeOfQuestion(index)
+
+
+    BackHandler{
+        if(backHandlerActive.value){
+            backHandlerActive.value = false
+            Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
+        }else{
+            navController.navigate(HomeGraph.Home.route){
+                popUpTo(Graph.HOME.graph)
+            }
+        }
+    }
 
     LaunchedEffect(imeState.value) {
         if(imeState.value){
@@ -117,7 +159,7 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
         state = scrollState
     ) {
         item(0) {
-            Hint(hint = "El operador de lógico > permite saber cuando un número es mayor o igual a otro.",
+            Hint(hint = questionsList[endIndicator-1].hint,
                 isIncorrect = isIncorrect.value)
 
             ShortIndication(indication = "Completa con la respuesta correcta")
@@ -132,7 +174,7 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        BlackBoxText(text = splitedCode[0])
+                        BlackBoxText(text = splitedCode.value[0])
 
                         Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
@@ -149,7 +191,7 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
 
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
-                    BlackBoxText(text = splitedCode[1])
+                    BlackBoxText(text = splitedCode.value[1])
                 }
             }
 
@@ -193,7 +235,18 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
                 keyboardActions = KeyboardActions(
                     onAny = {
                         if(actualAnswer.value != "")
-                            responseHandler(lifeCycleScope, correctAnswer, focusManager, focused, viewModel)
+                            responseHandler(
+                                lifeCycleScope,
+                                correctAnswer,
+                                focusManager,
+                                focused,
+                                viewModel,
+                                nextRoute,
+                                navController,
+                                index,
+                                endIndicator,
+                                questionsList.size
+                            )
                         else{
                             KeyboardFunctions.ClearFocus(focusManager, focused)
                         }
@@ -206,7 +259,18 @@ fun ResponseEntry (innerPadding: PaddingValues, viewModel: PracticeViewModel){
 
         item(1){
             PracticeButton(name = "Seguir", enable = actualAnswer.value != "") {
-                responseHandler(lifeCycleScope, correctAnswer, focusManager, focused, viewModel)
+                responseHandler(
+                    lifeCycleScope,
+                    correctAnswer,
+                    focusManager,
+                    focused,
+                    viewModel,
+                    nextRoute,
+                    navController,
+                    index,
+                    endIndicator,
+                    questionsList.size
+                )
             }
 
             Spacer(modifier = Modifier.padding(2.dp))
@@ -221,10 +285,25 @@ private fun responseHandler(
     correctAnswer: String,
     focusManager: FocusManager,
     focused: MutableState<Boolean>,
-    viewModel: PracticeViewModel
+    viewModel: PracticeViewModel,
+    nextRoute: String,
+    navController: NavHostController,
+    index: Int,
+    endIndicator: Int,
+    listSize: Int
 ){
     if(viewModel.VerifyingAnswer(actualAnswer.value, correctAnswer)){
-        /* TODO: navigation */
+        if(endIndicator == listSize){
+            navController.navigate(QuizGraph.LessonRecap.route)
+        }else{
+            if(nextRoute != ""){
+                navController.navigate(nextRoute)
+
+                viewModel.resetNavRoute()
+
+                viewModel.addIndex()
+            }
+        }
     }else{
         isIncorrect.value = true
         actualAnswer.value = ""

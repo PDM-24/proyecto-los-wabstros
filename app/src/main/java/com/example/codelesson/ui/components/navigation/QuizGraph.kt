@@ -12,6 +12,7 @@ import com.example.codelesson.ui.screens.ResponseEntry
 import com.example.codelesson.ui.screens.Theory
 import com.example.codelesson.util.PracticeViewModel
 
+
 fun NavGraphBuilder.quizGraph(
     innerPadding: PaddingValues,
     navController: NavHostController,

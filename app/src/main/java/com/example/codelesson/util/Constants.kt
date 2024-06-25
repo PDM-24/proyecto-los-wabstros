@@ -1,7 +1,9 @@
 package com.example.codelesson.util
 
 object Constants {
-    const val BASE_URL = "http://192.168.0.3:8080/api/"
+    const val BASE_URL = "http://192.168.198.21:8080/api/"
+    const val QUESTION_CONSTANT = "question"
+    const val GET_ALL_QUESTION = "/all"
     const val AUTH_CONSTANT = "auth"
     const val POST_USER = "/register"
     const val LOG_USER = "/login"

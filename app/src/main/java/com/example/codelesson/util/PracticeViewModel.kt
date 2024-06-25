@@ -169,20 +169,7 @@ class PracticeViewModel : ViewModel() {
                 Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
-                val newQuestion = mutableListOf<Question>()
-                var question: Question
-                _getLesson.value.questions.forEach {
-                    question = Question(it.type, it.code, it.question, it.hint, it.correctAnswer, it.options)
-                    newQuestion.add(question)
-                }
-                val newLesson = Practice(
-                    _getLesson.value.title,
-                    _getLesson.value.lesson,
-                    _getLesson.value.recap,
-                    newQuestion
-                )
-                _practiceList.value = newLesson
-                _questionList.value = _practiceList.value.questions.shuffled()
+                
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }

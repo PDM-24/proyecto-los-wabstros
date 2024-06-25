@@ -3,14 +3,14 @@ package com.example.codelesson.util
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.codelesson.model.Practice
-import com.example.codelesson.model.Question
-import com.example.codelesson.ui.components.navigation.QuizGraph
 import androidx.lifecycle.viewModelScope
 import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.LessonData
 import com.example.codelesson.data.models.TitleLesson
 import com.example.codelesson.data.remote.api.ApiClient
+import com.example.codelesson.model.Practice
+import com.example.codelesson.model.Question
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +37,7 @@ class PracticeViewModel : ViewModel() {
                     "}\n" +
                     "\n" +
                     "El return 0 indica que la función retorna 0, todas las funciones deben retornar algo.\n",
-            questions = listOf(
+            questions = mutableListOf(
                 Question(
                     incorrectAnswers = listOf(
                         "librería",
@@ -86,6 +86,11 @@ class PracticeViewModel : ViewModel() {
     private val _endIndicator = MutableStateFlow(0)
     val endIndicator = _endIndicator.asStateFlow()
 
+    //When start the app, init var titleList
+    init {
+        getTitle()
+    }
+
     fun resetIndex(){
         _index.value = 0
         _endIndicator.value = 0
@@ -105,13 +110,14 @@ class PracticeViewModel : ViewModel() {
 
     fun verifyTypeOfQuestion(
         index: Int
-    ){
-        when(_questionList.value[index].type){
+    ) {
+        when (_questionList.value[index].type) {
             1 -> _nextNavigationRoute.value = QuizGraph.MovingLabel.route
             2 -> _nextNavigationRoute.value = QuizGraph.ResponseEntry.route
             3 -> _nextNavigationRoute.value = QuizGraph.MultipleResponse.route
         }
-        
+    }
+
     private val _titleList = MutableStateFlow<List<TitleLesson>>(emptyList())
     val titleList = _titleList.asStateFlow()
     private val _getId = MutableStateFlow("")
@@ -126,11 +132,6 @@ class PracticeViewModel : ViewModel() {
     val token = _token.asStateFlow()
     private val _exp = MutableStateFlow(0)
     val exp = _exp.asStateFlow()
-
-    //When start the app, init var titleList
-    init {
-        getTitle()
-    }
 
     fun startDragging() {
         _isCurrentlyDragging.value = true
@@ -152,17 +153,36 @@ class PracticeViewModel : ViewModel() {
             try {
                 val response = api.getLessonTitle()
                 _titleList.value = response.data
+                Log.d("Title", _titleList.toString())
             } catch (e: Exception) {
                 Log.d("Get Title", e.message.toString())
             }
         }
     }
 
+    fun setId(id: String) {
+        _getId.value = id
+    }
     fun getLesson() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
+                val newQuestion = mutableListOf<Question>()
+                var question: Question
+                _getLesson.value.questions.forEach {
+                    question = Question(it.type, it.code, it.question, it.hint, it.correctAnswer, it.options)
+                    newQuestion.add(question)
+                }
+                val newLesson = Practice(
+                    _getLesson.value.title,
+                    _getLesson.value.lesson,
+                    _getLesson.value.recap,
+                    newQuestion
+                )
+                _practiceList.value = newLesson
+                _questionList.value = _practiceList.value.questions.shuffled()
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }

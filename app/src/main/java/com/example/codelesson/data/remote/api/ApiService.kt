@@ -15,6 +15,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     //Makes the login request and returns a token which can be used to bring the user's data
@@ -34,8 +35,8 @@ interface ApiService {
     @GET(Constants.LESSON_CONSTANT + Constants.GET_LESSON_TITLE)
     suspend fun getLessonTitle() : DataLesson
 
-    @GET(Constants.LESSON_CONSTANT + Constants.GET_LESSON)
-    suspend fun getLessonById(id: String) : LessonResponse
+    @GET("${Constants.LESSON_CONSTANT}${Constants.GET_LESSON}")
+    suspend fun getLessonById(@Query("id") id: String) : LessonResponse
 
     @POST(Constants.USER_CONSTANT + Constants.UPDATE_USER_PASSWORD)
     suspend fun updatePassword(

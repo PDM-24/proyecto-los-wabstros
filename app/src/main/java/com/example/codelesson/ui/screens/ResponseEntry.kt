@@ -102,6 +102,10 @@ fun ResponseEntry (
     }
     val correctAnswer = questionsList[endIndicator-1].correctAnswer
 
+    val indication = remember {
+        mutableStateOf(questionsList[endIndicator-1].question)
+    }
+
     val backHandlerActive = remember {
         mutableStateOf(true)
     }
@@ -164,7 +168,7 @@ fun ResponseEntry (
 
             ShortIndication(indication = "Completa con la respuesta correcta")
 
-            DetailedIndication(indication = "validacion para entrar al if si n es mayor que 3")
+            DetailedIndication(indication = indication.value)
 
             CodeBlock {
                 Row(

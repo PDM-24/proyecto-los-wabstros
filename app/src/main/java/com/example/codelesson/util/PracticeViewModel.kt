@@ -86,6 +86,11 @@ class PracticeViewModel : ViewModel() {
     private val _endIndicator = MutableStateFlow(0)
     val endIndicator = _endIndicator.asStateFlow()
 
+    //When start the app, init var titleList
+    init {
+        getTitle()
+    }
+
     fun resetIndex(){
         _index.value = 0
         _endIndicator.value = 0
@@ -128,11 +133,6 @@ class PracticeViewModel : ViewModel() {
     private val _exp = MutableStateFlow(0)
     val exp = _exp.asStateFlow()
 
-    //When start the app, init var titleList
-    init {
-        getTitle()
-    }
-
     fun startDragging() {
         _isCurrentlyDragging.value = true
     }
@@ -153,15 +153,20 @@ class PracticeViewModel : ViewModel() {
             try {
                 val response = api.getLessonTitle()
                 _titleList.value = response.data
+                Log.d("Title", _titleList.toString())
             } catch (e: Exception) {
                 Log.d("Get Title", e.message.toString())
             }
         }
     }
 
+    fun setId(id: String) {
+        _getId.value = id
+    }
     fun getLesson() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
                 val newQuestion = mutableListOf<Question>()
@@ -177,6 +182,7 @@ class PracticeViewModel : ViewModel() {
                     newQuestion
                 )
                 _practiceList.value = newLesson
+                _questionList.value = _practiceList.value.questions.shuffled()
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }

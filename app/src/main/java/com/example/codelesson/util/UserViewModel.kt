@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.codelesson.data.models.PasswordData
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.data.models.UserDataLogin
+import com.example.codelesson.data.models.UserDataUpdate
 import com.example.codelesson.data.remote.api.ApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,6 +90,27 @@ class UserViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         context,"There was an error changing the password!", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+    fun updateProfile(userData: UserDataUpdate, context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = api.updateProfile(userData, "Bearer ${_token.value}")
+                _token.value = response.data.token
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,"Data was updated successfully", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,"There was an error updating the data", Toast.LENGTH_SHORT
                     ).show()
                 }
             }

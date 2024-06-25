@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.codelesson.data.models.PasswordData
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.data.models.UserDataLogin
 import com.example.codelesson.data.remote.api.ApiClient
@@ -67,6 +68,27 @@ class UserViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         context, "There was an error creating the user!", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
+    fun updatePassword(password: PasswordData, context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = api.updatePassword(password, "Bearer ${_token.value}")
+                _token.value = response.data.token
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,"Password was changed successfully", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,"There was an error changing the password!", Toast.LENGTH_SHORT
                     ).show()
                 }
             }

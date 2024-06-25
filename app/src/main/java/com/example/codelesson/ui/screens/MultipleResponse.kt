@@ -1,5 +1,7 @@
 package com.example.codelesson.ui.screens
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,18 +15,26 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import com.example.codelesson.ui.components.navigation.Graph
+import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.components.practicecomponents.DetailedIndication
@@ -49,9 +59,59 @@ private val changeAnswer: MutableState<Boolean> = mutableStateOf(false)
 private val thereIsAnAnswer: MutableState<Boolean> = mutableStateOf(false)
 
 @Composable
-fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel){
+fun MultipleResponse (
+    innerPadding: PaddingValues,
+    viewModel: PracticeViewModel,
+    navController: NavHostController
+){
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
-    val correctAnswer = "IMPRIME 01234"
+
+    val nextRoute by viewModel.nextNavigationRoute.collectAsState()
+    val index by viewModel.index.collectAsState()
+    val endIndicator by viewModel.endIndicator.collectAsState()
+    val questionsList by viewModel.questionList.collectAsState()
+
+    val correctAnswer = questionsList[endIndicator-1].correctAnswer
+
+    val filterList = remember {
+        mutableStateOf(emptyList<String>())
+    }
+
+    val backHandlerActive = remember {
+        mutableStateOf(true)
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        viewModel.resetNavRoute()
+
+        filterList.value = listOf(
+            questionsList[endIndicator-1].incorrectAnswers[0],
+            questionsList[endIndicator-1].incorrectAnswers[1],
+            questionsList[endIndicator-1].correctAnswer
+        ).shuffled()
+
+        isIncorrect.value = false
+        actualAnswer.value = ""
+        changeAnswer.value = false
+        thereIsAnAnswer.value = false
+    }
+
+    if(nextRoute == "")
+        viewModel.verifyTypeOfQuestion(index)
+
+
+    BackHandler{
+        if(backHandlerActive.value){
+            backHandlerActive.value = false
+            Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
+        }else{
+            navController.navigate(HomeGraph.Home.route){
+                popUpTo(Graph.HOME.graph)
+            }
+        }
+    }
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -61,22 +121,19 @@ fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel)
     ) {
         item {
             Hint(
-                hint = "El cout permite mostrar por pantalla cualquier tipo de dato.",
+                hint = questionsList[endIndicator-1].hint,
                 isIncorrect = isIncorrect.value
             )
             ShortIndication(indication = "escoge la opción correcta")
             DetailedIndication(indication = "que hace el codigo?")
 
             CodeBlock {
-                BlackBoxText(text = "int NUMBERS = 01234;\n" +
-                        "\n" +
-                        "cout << NUMBERS;")
-
+                BlackBoxText(text = questionsList[endIndicator-1].code)
             }
 
             Spacer(modifier = Modifier.padding(2.dp))
 
-            AnswOption().forEach {
+            filterList.value.forEach {
                 BttnMultChoice(answer = it, correctAnswer = correctAnswer)
                 Spacer(modifier = Modifier.padding(5.dp))
             }
@@ -84,8 +141,20 @@ fun MultipleResponse (innerPadding: PaddingValues, viewModel: PracticeViewModel)
             Spacer(modifier = Modifier.padding(3.dp))
 
             PracticeButton(name = "Seguir", enable = thereIsAnAnswer.value) {
-                if(VerifyingAnswer(actualAnswer.value, correctAnswer)){
+                if(viewModel.VerifyingAnswer(actualAnswer.value, correctAnswer)){
                     isIncorrect.value = false
+
+                    if(endIndicator == questionsList.size){
+                        navController.navigate(QuizGraph.LessonRecap.route)
+                    }else{
+                        if(nextRoute != ""){
+                            navController.navigate(nextRoute)
+
+                            viewModel.resetNavRoute()
+
+                            viewModel.addIndex()
+                        }
+                    }
                 }else{
                     isIncorrect.value = true
 
@@ -171,14 +240,3 @@ private fun BttnMultChoice(answer: String, correctAnswer: String){
         )
     }
 }
-
-private fun AnswOption(): List<String>{
-    return listOf(
-        "LEE LA VARIABLE NUMBERS",
-        "GUARDA NUMBERS EN COUT",
-        "IMPRIME 01234"
-    )
-}
-
-fun VerifyingAnswer(answer: String, correctAnswer: String) =
-    answer == correctAnswer

@@ -12,6 +12,7 @@ import com.example.codelesson.ui.screens.ResponseEntry
 import com.example.codelesson.ui.screens.Theory
 import com.example.codelesson.util.PracticeViewModel
 
+
 fun NavGraphBuilder.quizGraph(
     innerPadding: PaddingValues,
     navController: NavHostController,
@@ -26,19 +27,19 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.MovingLabel.route) {
-            MainMovingLabel(innerPadding = innerPadding, practiceViewModel = practiceViewModel)
+            MainMovingLabel(innerPadding = innerPadding, practiceViewModel = practiceViewModel, navController)
         }
 
         composable(QuizGraph.ResponseEntry.route) {
-            ResponseEntry(innerPadding, practiceViewModel)
+            ResponseEntry(innerPadding, practiceViewModel, navController)
         }
 
         composable(QuizGraph.MultipleResponse.route) {
-            MultipleResponse(innerPadding, practiceViewModel)
+            MultipleResponse(innerPadding, practiceViewModel, navController)
         }
 
         composable(QuizGraph.LessonRecap.route) {
-            LessonRecap(innerPadding, practiceViewModel)
+            LessonRecap(innerPadding, practiceViewModel, navController)
         }
     }
 }

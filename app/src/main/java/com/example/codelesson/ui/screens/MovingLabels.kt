@@ -1,5 +1,7 @@
 package com.example.codelesson.ui.screens
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,11 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
 import com.example.codelesson.data.QuizData
 import com.example.codelesson.data.quizList
 import com.example.codelesson.ui.components.movinglabelcomponents.AnswerLabel
@@ -39,6 +44,9 @@ import com.example.codelesson.ui.components.movinglabelcomponents.DragTarget
 import com.example.codelesson.ui.components.movinglabelcomponents.DropItem
 import com.example.codelesson.ui.components.movinglabelcomponents.LabelEmpty
 import com.example.codelesson.ui.components.movinglabelcomponents.QuestionLabel
+import com.example.codelesson.ui.components.navigation.Graph
+import com.example.codelesson.ui.components.navigation.HomeGraph
+import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.components.practicecomponents.Hint
 import com.example.codelesson.ui.components.practicecomponents.PracticeButton
 import com.example.codelesson.ui.components.practicecomponents.ShortIndication
@@ -53,7 +61,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun MovingLabels (
     innerPadding: PaddingValues,
-    practiceViewModel: PracticeViewModel
+    practiceViewModel: PracticeViewModel,
+    navController: NavHostController
 ){
     Column(
         modifier = Modifier
@@ -103,6 +112,36 @@ fun MovingLabels (
 
         val colorDefault = AnimatingColors.animatingColor(color = colorToDefault)
         val borderDefault = AnimatingColors.animatingColor(color = borderToDefault)
+
+        val nextRoute by practiceViewModel.nextNavigationRoute.collectAsState()
+        val index by practiceViewModel.index.collectAsState()
+        val endIndicator by practiceViewModel.endIndicator.collectAsState()
+        val questionsList by practiceViewModel.questionList.collectAsState()
+
+        val backHandlerActive = remember {
+            mutableStateOf(true)
+        }
+
+        val context = LocalContext.current
+
+        LaunchedEffect(true) {
+            practiceViewModel.resetNavRoute()
+        }
+
+        if(nextRoute == "")
+            practiceViewModel.verifyTypeOfQuestion(index)
+
+
+        BackHandler{
+            if(backHandlerActive.value){
+                backHandlerActive.value = false
+                Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
+            }else{
+                navController.navigate(HomeGraph.Home.route){
+                    popUpTo(Graph.HOME.graph)
+                }
+            }
+        }
 
         Row(
             modifier = Modifier
@@ -188,8 +227,18 @@ fun MovingLabels (
             val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
             Spacer(modifier = Modifier.padding(24.dp))
             PracticeButton(name = "Seguir", enable = isSelected) {
-                if (VerifyingAnswer(text, correct)) {
-                    //AQUI HACE LA NAVEGACION
+                if (practiceViewModel.VerifyingAnswer(text, correct)) {
+                    if(endIndicator == questionsList.size){
+                        navController.navigate(QuizGraph.LessonRecap.route)
+                    }else{
+                        if(nextRoute != ""){
+                            navController.navigate(nextRoute)
+
+                            practiceViewModel.resetNavRoute()
+
+                            practiceViewModel.addIndex()
+                        }
+                    }
                 }
                 else {
                     lifeCycleScope.launch {
@@ -208,5 +257,5 @@ fun MovingLabels (
 @Preview(showSystemUi = true)
 @Composable
 private fun MovingLabelPreview() {
-    MovingLabels(innerPadding = PaddingValues(), PracticeViewModel())
+    MovingLabels(innerPadding = PaddingValues(), PracticeViewModel(), NavHostController(LocalContext.current))
 }

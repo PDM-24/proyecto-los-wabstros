@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CodeLesson</string>
+    <string name="login_btn_login">Iniciar sesión</string>
+    <string name="login_username">Usuario</string>
+    <string name="login_placeholder_user">Ingresa tu usuario</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_placeholder_pass">Ingresa tu contraseña</string>
+    <string name="login_toast_error">Wrong Credentials</string>
+    <string name="signup_toast_password">Las contraseñas no coinciden</string>
+    <string name="error_1">Incorrect username or password</string>
 </resources>

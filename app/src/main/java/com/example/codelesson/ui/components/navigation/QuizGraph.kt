@@ -12,6 +12,7 @@ import com.example.codelesson.ui.screens.ResponseEntry
 import com.example.codelesson.ui.screens.Theory
 import com.example.codelesson.util.PracticeViewModel
 
+
 fun NavGraphBuilder.quizGraph(
     innerPadding: PaddingValues,
     navController: NavHostController,
@@ -38,7 +39,7 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.LessonRecap.route) {
-            LessonRecap(innerPadding, practiceViewModel)
+            LessonRecap(innerPadding, practiceViewModel, navController)
         }
     }
 }

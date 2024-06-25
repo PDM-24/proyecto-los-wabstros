@@ -169,7 +169,6 @@ class PracticeViewModel : ViewModel() {
                 Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
-                
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }

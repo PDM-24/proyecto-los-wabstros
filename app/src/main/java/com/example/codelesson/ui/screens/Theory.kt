@@ -57,7 +57,6 @@ fun Theory(
         CodeBlock {
             BlackBoxText(
                 text = theory.value.uppercase()
-
             )
         }
 

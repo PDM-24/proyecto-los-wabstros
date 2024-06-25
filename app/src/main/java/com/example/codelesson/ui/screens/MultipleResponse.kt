@@ -70,7 +70,7 @@ fun MultipleResponse (
     val index by viewModel.index.collectAsState()
     val endIndicator by viewModel.endIndicator.collectAsState()
     val questionsList by viewModel.questionList.collectAsState()
-
+    val nose: String
     val correctAnswer = questionsList[endIndicator-1].correctAnswer
 
     val filterList = remember {

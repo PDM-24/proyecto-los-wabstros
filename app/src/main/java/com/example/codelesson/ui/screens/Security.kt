@@ -92,7 +92,7 @@ fun Security(innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                         var userPassword = PasswordData(userPassword, newPassword)
                         viewModel.updatePassword(userPassword, context)
                         message(context, mensaje = "Contraseña actualizada")
-                        navController.navigate(ProfileGraph.Profile.route)
+                        navController.popBackStack()
                     }else{
                         message(context, mensaje = "Las contraseñas no coinciden")
                         erasePassword.value = true

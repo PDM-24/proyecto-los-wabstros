@@ -24,6 +24,7 @@ import com.example.codelesson.ui.components.homecomponents.ButtonNavigate
 import com.example.codelesson.ui.components.navigation.QuizGraph
 import com.example.codelesson.ui.theme.CodeLessonTheme
 import com.example.codelesson.util.PracticeViewModel
+import com.example.codelesson.util.UserViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -31,8 +32,10 @@ import kotlinx.coroutines.launch
 fun Home(
     innerPadding: PaddingValues,
     navController: NavHostController,
-    viewModel: PracticeViewModel
+    viewModel: PracticeViewModel,
+    userViewModel: UserViewModel
 ) {
+    userViewModel.getUser()
     val titleList by viewModel.titleList.collectAsState()
 
     CodeLessonTheme {
@@ -72,6 +75,7 @@ private fun HomePreview() {
     Home(
         PaddingValues(),
         NavHostController(LocalContext.current),
-        PracticeViewModel()
+        PracticeViewModel(),
+        UserViewModel()
     )
 }

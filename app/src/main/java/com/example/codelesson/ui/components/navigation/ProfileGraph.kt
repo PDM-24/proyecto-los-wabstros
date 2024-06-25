@@ -24,11 +24,11 @@ fun NavGraphBuilder.profileGraph(
         }
 
         composable(ProfileGraph.EditProfile.route) {
-            EditProfile(innerPadding, userViewModel)
+            EditProfile(innerPadding, userViewModel, navController)
         }
 
         composable(ProfileGraph.Security.route) {
-            Security(innerPadding, userViewModel)
+            Security(innerPadding, userViewModel, navController)
         }
     }
 }

@@ -155,8 +155,6 @@ fun Profile (
                         navController.navigate(LoginGraph.Login.route) {
                             popUpTo(LoginGraph.Login.route)
                         }
-
-
                     }
                 }
                 Column (

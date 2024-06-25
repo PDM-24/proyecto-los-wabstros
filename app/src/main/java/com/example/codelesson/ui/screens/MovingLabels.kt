@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.example.codelesson.data.QuizData
-import com.example.codelesson.data.quizList
 import com.example.codelesson.ui.components.movinglabelcomponents.AnswerLabel
 import com.example.codelesson.ui.components.movinglabelcomponents.DragTarget
 import com.example.codelesson.ui.components.movinglabelcomponents.DropItem
@@ -70,7 +69,7 @@ fun MovingLabels (
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        val correct = "Numero Entero"
+
         var isSelected by remember {
             mutableStateOf(false)
         }
@@ -78,8 +77,14 @@ fun MovingLabels (
             mutableStateOf(true)
         }
 
+        val nextRoute by practiceViewModel.nextNavigationRoute.collectAsState()
+        val index by practiceViewModel.index.collectAsState()
+        val endIndicator by practiceViewModel.endIndicator.collectAsState()
+        val questionsList by practiceViewModel.questionList.collectAsState()
+        val correctAnswer = questionsList[endIndicator-1].correctAnswer
+
         Hint(
-            hint = "INT ES UNA VARIABLE DE TIPO ENTERO CON UN RANGO DE -32768 A 32767.",
+            hint = questionsList[endIndicator-1].hint,
             isIncorrect = !isCorrect
         )
         ShortIndication(
@@ -90,7 +95,17 @@ fun MovingLabels (
         var text by remember {
             mutableStateOf("")
         }
-        val list = quizList()
+        val list = mutableListOf(
+            questionsList[endIndicator-1].correctAnswer
+        )
+        questionsList[endIndicator-1].incorrectAnswers.forEach {
+            list.add(it)
+        }
+        val dataQuiz: MutableList<QuizData> = mutableListOf()
+
+        list.forEachIndexed { index, s ->
+            dataQuiz.add(QuizData("question ${index}", s))
+        }
 
         val animatedColorSelectionContainer =
             if (isCorrect)
@@ -112,11 +127,6 @@ fun MovingLabels (
 
         val colorDefault = AnimatingColors.animatingColor(color = colorToDefault)
         val borderDefault = AnimatingColors.animatingColor(color = borderToDefault)
-
-        val nextRoute by practiceViewModel.nextNavigationRoute.collectAsState()
-        val index by practiceViewModel.index.collectAsState()
-        val endIndicator by practiceViewModel.endIndicator.collectAsState()
-        val questionsList by practiceViewModel.questionList.collectAsState()
 
         val backHandlerActive = remember {
             mutableStateOf(true)
@@ -149,7 +159,7 @@ fun MovingLabels (
                 .padding(top = 12.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            QuestionLabel("INT")
+            QuestionLabel(questionsList[endIndicator-1].question)
 
             DropItem<QuizData>(
                 modifier = Modifier
@@ -157,7 +167,7 @@ fun MovingLabels (
                     .size(Dp(screenWidth / 3.5f))
             ) { isInBound, quizItem ->
                 if (quizItem != null) {
-                    LaunchedEffect(quizItem) {
+                    LaunchedEffect(dataQuiz) {
                         text = quizItem.answer
                         isSelected = true
                     }
@@ -200,8 +210,8 @@ fun MovingLabels (
                     .padding(28.dp),
                 columns = GridCells.Fixed(2),
             ) {
-                items(list) {
-                    if ((it.answer != text) && (it != list[2])) {
+                items(dataQuiz) {
+                    if ((it.answer != text) && (it != dataQuiz[2])) {
                         //Elemento que podra ser arrastrado
                         DragTarget(
                             dataDrop = it,
@@ -215,19 +225,19 @@ fun MovingLabels (
             }
             //Se renderiza fuera del verticalgrid para poder centrar el tercer elememto
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                if (list[2].answer != text) {
+                if (dataQuiz[2].answer != text) {
                     DragTarget(
-                        dataDrop = list[2],
+                        dataDrop = dataQuiz[2],
                         viewModel = practiceViewModel
                     ) {
-                        AnswerLabel(text = list[2].answer, colorDefault, borderDefault)
+                        AnswerLabel(text = dataQuiz[2].answer, colorDefault, borderDefault)
                     }
                 }
             }
             val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
             Spacer(modifier = Modifier.padding(24.dp))
             PracticeButton(name = "Seguir", enable = isSelected) {
-                if (practiceViewModel.VerifyingAnswer(text, correct)) {
+                if (practiceViewModel.VerifyingAnswer(text, correctAnswer)) {
                     if(endIndicator == questionsList.size){
                         navController.navigate(QuizGraph.LessonRecap.route)
                     }else{

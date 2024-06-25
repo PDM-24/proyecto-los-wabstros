@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.codelesson.R
+import com.example.codelesson.data.models.UserDataUpdate
 import com.example.codelesson.ui.components.profileComponents.mainLetters
 import com.example.codelesson.ui.components.profileComponents.message
 import com.example.codelesson.ui.theme.DarkGrey
@@ -50,10 +51,15 @@ var apellidoUsuario: String = ""
 var emailUsuario: String = ""
 
 private val emptyFieldText: MutableState<Boolean> = mutableStateOf(false)
+
 @Composable
-fun EditProfile(innerPadding: PaddingValues, viewModel: UserViewModel, navController: NavHostController) {
-    val state by viewModel.user.collectAsState()
-    Column (
+fun EditProfile(
+    innerPadding: PaddingValues,
+    viewModel: UserViewModel,
+    navController: NavHostController,
+) {
+    val state by viewModel.userData.collectAsState()
+    Column(
         modifier = Modifier
             .padding(innerPadding)
             .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
@@ -61,21 +67,21 @@ fun EditProfile(innerPadding: PaddingValues, viewModel: UserViewModel, navContro
             .fillMaxSize()
             .background(DarkGrey),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-
+    ) {
         val context = LocalContext.current
-            Box (
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            Image(
                 modifier = Modifier
-                    .padding(8.dp)
-            ){
-                Image(
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(150.dp)
-                        .clip(CircleShape),
-                    painter = painterResource(id = R.drawable.default_image), contentDescription = "profile photo"
-                )
-                Icon(
+                    .width(150.dp)
+                    .height(150.dp)
+                    .clip(CircleShape),
+                painter = painterResource(id = R.drawable.default_image),
+                contentDescription = "profile photo"
+            )
+            Icon(
                 modifier = Modifier
                     .padding(end = 10.dp)
                     .align(Alignment.BottomEnd)
@@ -84,27 +90,29 @@ fun EditProfile(innerPadding: PaddingValues, viewModel: UserViewModel, navContro
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_circle),
                 contentDescription = "add icon",
                 tint = Color.White
-                )
-            }
+            )
+        }
 
         mainLetters(name = "Informacion personal")
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        profileTexField(state.nombre, "Nombre")
+        profileTexField(state.name, "Nombre")
 
-        profileTexField(state.apellido, "Apellido" )
+        profileTexField(state.lastName, "Apellido")
 
-        profileTexField(state.email, "Correo electronico" )
+        profileTexField(state.email, "Correo electronico")
 
         Spacer(modifier = Modifier.height(75.dp))
 
         profilBbutton("Actualizar") {
-            if (nombreUsuario != "" && apellidoUsuario != "" && emailUsuario != ""){
-                viewModel.updateUser(nombreUsuario, apellidoUsuario, emailUsuario)
+            if (nombreUsuario != "" && apellidoUsuario != "" && emailUsuario != "") {
+                val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
+                viewModel.updateProfile(data, context)
                 message(context, "Datos actualizados")
+                viewModel.getUser()
                 navController.navigate("Profile")
-            }else{
+            } else {
                 emptyFieldText.value = false
                 message(context, "Complete todos los datos")
             }
@@ -123,35 +131,39 @@ fun EditProfilePreview() {
 }
 
 @Composable
-fun profileTexField(contenido : String, label : String){
+fun profileTexField(contenido: String, label: String) {
     var valor by remember {
         mutableStateOf(contenido)
     }
-        if (label == "Nombre"){
+    if (label == "Nombre") {
 
-            if (valor != ""){
-                nombreUsuario = valor
-            }else{
-                nombreUsuario = ""
-            }
-        }else if (label == "Apellido"){
-            if (valor != ""){
-                apellidoUsuario = valor
-            }else{
-                apellidoUsuario = ""
-            }
-        }else if (label == "Correo electronico"){
-            if (valor != ""){
-                emailUsuario = valor
-            }else{
-                emailUsuario = ""
-            }
+        if (valor != "") {
+            nombreUsuario = valor
+        } else {
+            nombreUsuario = ""
         }
+    } else if (label == "Apellido") {
+        if (valor != "") {
+            apellidoUsuario = valor
+        } else {
+            apellidoUsuario = ""
+        }
+    } else if (label == "Correo electronico") {
+        if (valor != "") {
+            emailUsuario = valor
+        } else {
+            emailUsuario = ""
+        }
+    }
 
     Spacer(modifier = Modifier.height(20.dp))
     TextField(
         value = valor,
-        textStyle = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.SemiBold),
+        textStyle = TextStyle(
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold
+        ),
         label = { Text(text = label) },
         modifier = Modifier
             .width(300.dp)
@@ -162,6 +174,6 @@ fun profileTexField(contenido : String, label : String){
             focusedTextColor = Color.Black,
             unfocusedTextColor = Color.Black
         ),
-        onValueChange = {valor = it}
+        onValueChange = { valor = it }
     )
 }

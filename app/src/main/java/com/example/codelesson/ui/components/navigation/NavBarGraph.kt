@@ -17,7 +17,6 @@ fun NavBarGraph(
     NavHost(
         navController = navController,
         route = Graph.ROOT.graph,
-        //startDestination = Graph.HOME.graph
         startDestination = Graph.LOGIN.graph
     ) {
         loginGraph(navController, userViewModel, practiceViewModel)

@@ -54,8 +54,12 @@ import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.util.UserViewModel
 
 @Composable
-fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navController: NavHostController){
-    val state by viewModel.user.collectAsState()
+fun Profile (
+    innerPadding: PaddingValues,
+    viewModel: UserViewModel,
+    navController: NavHostController
+){
+    val userData by viewModel.userData.collectAsState()
     LazyColumn (
         modifier = Modifier
             .padding(innerPadding)
@@ -84,7 +88,7 @@ fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
             mainLetters(name = "Mi progreso")
 
             Text(
-                text = "${state.experiencia}%",
+                text = "${userData.exp}%",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp, end = 25.dp),
@@ -94,7 +98,7 @@ fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                 fontSize = 25.sp,
                 fontFamily = audioWide
             )
-            BarraDePorcentaje(porcentaje = state.experiencia / 100)
+            BarraDePorcentaje(porcentaje = userData.exp.toFloat() / 100)
 
             mainLetters(name = "Informacion personal")
 
@@ -110,7 +114,7 @@ fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                         .weight(0.5f)
                     //.background(color = Color.White)
                 ){
-                    dataLetters(name = state.nombre)
+                    dataLetters(name = userData.name)
                     secondaryLetters(name = "Nombre")
                 }
                 Column (
@@ -118,7 +122,7 @@ fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                         .weight(0.5f)
                     //.background(color = Color.Blue)
                 ){
-                    dataLetters(name = state.apellido)
+                    dataLetters(name = userData.lastName)
                     secondaryLetters(name = "Apellido")
                 }
             }
@@ -127,7 +131,7 @@ fun Profile (innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                     .padding(start = 40.dp, top = 50.dp)
                     .fillMaxWidth()
             ){
-                dataLetters(name = state.email)
+                dataLetters(name = userData.email)
                 secondaryLetters(name = "Correo")
             }
 

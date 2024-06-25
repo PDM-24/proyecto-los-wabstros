@@ -20,7 +20,7 @@ fun NavGraphBuilder.homeGraph(
         startDestination = HomeGraph.Home.route
     ) {
         composable(HomeGraph.Home.route) {
-            Home(innerPadding, navController, practiceViewModel)
+            Home(innerPadding, navController, practiceViewModel, userViewModel)
         }
 
         profileGraph(innerPadding, navController, userViewModel)

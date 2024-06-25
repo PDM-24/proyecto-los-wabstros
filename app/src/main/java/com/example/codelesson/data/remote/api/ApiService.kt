@@ -1,12 +1,14 @@
 package com.example.codelesson.data.remote.api
 
 import com.example.codelesson.data.models.DataLesson
+import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.LessonResponse
 import com.example.codelesson.data.models.PasswordData
 import com.example.codelesson.data.models.Profile
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.data.models.UserDataLogin
 import com.example.codelesson.data.models.UserDataUpdate
+import com.example.codelesson.data.models.UserExpData
 import com.example.codelesson.data.response.LoginResponse
 import com.example.codelesson.util.Constants
 import retrofit2.http.Body
@@ -44,6 +46,17 @@ interface ApiService {
     @POST(Constants.USER_CONSTANT + Constants.UPDATE_USER_PROFILE)
     suspend fun updateProfile(
         @Body userData: UserDataUpdate,
+        @Header("Authorization") token: String
+    ) : LoginResponse
+
+    @GET(Constants.USER_CONSTANT + Constants.GET_USER_EXP)
+    suspend fun getExp(
+        @Header("Authorization") token: String
+    ) : UserExpData
+
+    @POST(Constants.USER_CONSTANT + Constants.UPDATE_USER_EXP)
+    suspend fun updateExp(
+        @Body exp: ExpUpdateData,
         @Header("Authorization") token: String
     ) : LoginResponse
 }

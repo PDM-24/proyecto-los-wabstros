@@ -214,7 +214,7 @@ fun ResponseEntry (
                 minLines = 1,
                 singleLine = true,
                 placeholder = { Text(
-                    text = "Ingrese el error",
+                    text = "Ingrese su respuesta",
                     fontFamily = poppins,
                     fontWeight = FontWeight.Normal,
                     fontSize = 13.sp

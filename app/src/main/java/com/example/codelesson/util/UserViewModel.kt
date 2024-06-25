@@ -96,6 +96,9 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun deleteToke() {
+        _token.value = ""
+    }
     fun updateProfile(userData: UserDataUpdate, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

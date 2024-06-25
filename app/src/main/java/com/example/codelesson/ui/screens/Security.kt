@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.codelesson.data.models.PasswordData
 import com.example.codelesson.ui.components.navigation.ProfileGraph
 import com.example.codelesson.ui.components.profileComponents.mainLetters
 import com.example.codelesson.ui.components.profileComponents.message
@@ -88,8 +89,8 @@ fun Security(innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
             profilBbutton("ACTUALIZAR") {
                 if (checkedEmptyPassword(newPassword) && checkedEmptyPassword(confirmPassword) && checkedEmptyPassword(userPassword)){
                     if (checkedNewPassword(newPassword, confirmPassword)){
-//                        var userPassword = PasswordData(userPassword, newPassword)
-//                        viewModel.updatepassword(userPassword)
+                        var userPassword = PasswordData(userPassword, newPassword)
+                        viewModel.updatePassword(userPassword, context)
                         message(context, mensaje = "Contraseña actualizada")
                         navController.navigate(ProfileGraph.Profile.route)
                     }else{

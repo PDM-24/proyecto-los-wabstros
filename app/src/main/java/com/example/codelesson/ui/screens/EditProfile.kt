@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.example.codelesson.R
 import com.example.codelesson.data.models.UserDataUpdate
@@ -45,6 +47,8 @@ import com.example.codelesson.ui.components.profileComponents.mainLetters
 import com.example.codelesson.ui.components.profileComponents.message
 import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.util.UserViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 var nombreUsuario: String = ""
 var apellidoUsuario: String = ""
@@ -68,6 +72,7 @@ fun EditProfile(
             .background(DarkGrey),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
         val context = LocalContext.current
         Box(
             modifier = Modifier
@@ -107,11 +112,14 @@ fun EditProfile(
 
         profilBbutton("Actualizar") {
             if (nombreUsuario != "" && apellidoUsuario != "" && emailUsuario != "") {
-                val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
-                viewModel.updateProfile(data, context)
-                message(context, "Datos actualizados")
-                viewModel.getUser()
-                navController.navigate("Profile")
+                lifeCycleScope.launch {
+                    val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
+                    viewModel.updateProfile(data, context)
+                    message(context, "Datos actualizados")
+                    viewModel.getUser()
+                    delay(500)
+                    navController.navigate("Profile")
+                }
             } else {
                 emptyFieldText.value = false
                 message(context, "Complete todos los datos")

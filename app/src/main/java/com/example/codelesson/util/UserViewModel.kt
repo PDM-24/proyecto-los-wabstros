@@ -52,4 +52,24 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+
+    fun createUser(userData: UserData, context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                api.postUser(userData)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context, "The user was created successfully!", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context, "There was an error creating the user!", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
 }

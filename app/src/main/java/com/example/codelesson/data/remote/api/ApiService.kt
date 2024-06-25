@@ -5,6 +5,7 @@ import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.LessonResponse
 import com.example.codelesson.data.models.PasswordData
 import com.example.codelesson.data.models.Profile
+import com.example.codelesson.data.models.QuestionModel
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.data.models.UserDataLogin
 import com.example.codelesson.data.models.UserDataUpdate
@@ -60,4 +61,7 @@ interface ApiService {
         @Body exp: ExpUpdateData,
         @Header("Authorization") token: String
     ) : LoginResponse
+
+    @GET(Constants.QUESTION_CONSTANT + Constants.GET_ALL_QUESTION)
+    suspend fun getQuestion(@Query("id") id: String) : QuestionModel
 }

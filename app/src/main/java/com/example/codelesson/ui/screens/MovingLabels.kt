@@ -1,5 +1,6 @@
 package com.example.codelesson.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -60,7 +61,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MovingLabels (
     innerPadding: PaddingValues,
-    practiceViewModel: PracticeViewModel,
+    viewModel: PracticeViewModel,
     navController: NavHostController
 ){
     Column(
@@ -69,6 +70,13 @@ fun MovingLabels (
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
+        val nextRoute by viewModel.nextNavigationRoute.collectAsState()
+        val index by viewModel.index.collectAsState()
+        val endIndicator = remember {
+            viewModel.endIndicator.value
+        }
+        val questionsList by viewModel.questionList.collectAsState()
+        val correctAnswer = questionsList[endIndicator-1].correctAnswer
 
         var isSelected by remember {
             mutableStateOf(false)
@@ -77,12 +85,9 @@ fun MovingLabels (
             mutableStateOf(true)
         }
 
-        val nextRoute by practiceViewModel.nextNavigationRoute.collectAsState()
-        val index by practiceViewModel.index.collectAsState()
-        val endIndicator by practiceViewModel.endIndicator.collectAsState()
-        val questionsList by practiceViewModel.questionList.collectAsState()
-        val correctAnswer = questionsList[endIndicator-1].correctAnswer
 
+        Log.i("Question", "Labels response: $questionsList")
+        Log.i("EndIndicator", "Response endIndicator: $endIndicator")
         Hint(
             hint = questionsList[endIndicator-1].hint,
             isIncorrect = !isCorrect
@@ -135,11 +140,11 @@ fun MovingLabels (
         val context = LocalContext.current
 
         LaunchedEffect(true) {
-            practiceViewModel.resetNavRoute()
+            viewModel.resetNavRoute()
         }
 
         if(nextRoute == "")
-            practiceViewModel.verifyTypeOfQuestion(index)
+            viewModel.verifyTypeOfQuestion(index)
 
 
         BackHandler{
@@ -215,7 +220,7 @@ fun MovingLabels (
                         //Elemento que podra ser arrastrado
                         DragTarget(
                             dataDrop = it,
-                            viewModel = practiceViewModel
+                            viewModel = viewModel
                         ) {
                             //Contenido del elemento arrastrable
                             AnswerLabel(text = it.answer, colorDefault, borderDefault)
@@ -228,7 +233,7 @@ fun MovingLabels (
                 if (dataQuiz[2].answer != text) {
                     DragTarget(
                         dataDrop = dataQuiz[2],
-                        viewModel = practiceViewModel
+                        viewModel = viewModel
                     ) {
                         AnswerLabel(text = dataQuiz[2].answer, colorDefault, borderDefault)
                     }
@@ -237,16 +242,16 @@ fun MovingLabels (
             val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
             Spacer(modifier = Modifier.padding(24.dp))
             PracticeButton(name = "Seguir", enable = isSelected) {
-                if (practiceViewModel.VerifyingAnswer(text, correctAnswer)) {
+                if (viewModel.VerifyingAnswer(text, correctAnswer)) {
                     if(endIndicator == questionsList.size){
                         navController.navigate(QuizGraph.LessonRecap.route)
                     }else{
                         if(nextRoute != ""){
                             navController.navigate(nextRoute)
 
-                            practiceViewModel.resetNavRoute()
+                            viewModel.resetNavRoute()
 
-                            practiceViewModel.addIndex()
+                            viewModel.addIndex()
                         }
                     }
                 }

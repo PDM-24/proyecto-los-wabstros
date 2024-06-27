@@ -1,5 +1,6 @@
 package com.example.codelesson.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -16,6 +17,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
@@ -41,8 +46,35 @@ fun LessonRecap (
     practiceViewModel: PracticeViewModel,
     navController: NavHostController
 ){
+    val exp = remember {
+        mutableStateOf(practiceViewModel.exp.value)
+    }
     val recap = remember {
         mutableStateOf(practiceViewModel.practiceList.value.recap)
+    }
+    val title by practiceViewModel.titleTopBar.collectAsState()
+    var addExp: Int = 0
+    var newExp = ExpUpdateData(0)
+
+    LaunchedEffect(key1 = true) {
+        practiceViewModel.getExp()
+        Log.d("Titulo", title)
+        Log.d("Old Exp", exp.value.toString())
+        when(title) {
+            "OUTPUT" -> { addExp = 5}
+            "CONDICIONES" -> { addExp = 20}
+            "ESTRUCTURA BÁSICA" -> { addExp = 5}
+            "COMENTARIOS" -> { addExp = 10}
+            "TIPOS DE VARIABLES" -> { addExp = 10}
+            "INPUTS" -> { addExp = 12}
+            "OPERADORES" -> { addExp = 14}
+            "STRINGS" -> { addExp = 14}
+            "BOOLEANOS" -> { addExp = 15}
+        }
+        exp.value += addExp
+        Log.d("New Exp", exp.value.toString())
+        newExp = ExpUpdateData(exp.value)
+        practiceViewModel.updateExp(newExp)
     }
 
     val backHandlerActive = remember {
@@ -106,7 +138,9 @@ fun LessonRecap (
 
         //Buton de terminar
         Button(
-            onClick = { navController.navigate(Graph.HOME.graph) },
+            onClick = { navController.navigate(Graph.HOME.graph){
+                popUpTo(Graph.HOME.graph)
+            } },
             shape = MaterialTheme.shapes.large,
             border = BorderStroke(
                 width = 2.dp,

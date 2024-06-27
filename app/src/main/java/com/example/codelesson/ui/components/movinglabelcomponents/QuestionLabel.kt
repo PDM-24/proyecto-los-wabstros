@@ -16,12 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.codelesson.ui.theme.poppins
 
 @Composable
 fun QuestionLabel(text: String) {
     Card(
-        modifier = Modifier.width(100.dp).height(40.dp)
+        modifier = Modifier.width(115.dp).height(40.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxSize().background(Color.Gray),
@@ -31,6 +32,7 @@ fun QuestionLabel(text: String) {
             Text(
                 text = text,
                 fontFamily = poppins,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.W400,
                 textAlign = TextAlign.Center
             )

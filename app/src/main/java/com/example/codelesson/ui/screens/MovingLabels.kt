@@ -70,6 +70,7 @@ fun MovingLabels (
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
+        val practiceList by viewModel.practiceList.collectAsState()
         val nextRoute by viewModel.nextNavigationRoute.collectAsState()
         val index by viewModel.index.collectAsState()
         val endIndicator = remember {
@@ -87,6 +88,7 @@ fun MovingLabels (
 
 
         Log.i("Question", "Labels response: $questionsList")
+        Log.i("Practice", "Labels response: $practiceList")
         Log.i("EndIndicator", "Response endIndicator: $endIndicator")
         Hint(
             hint = questionsList[endIndicator-1].hint,

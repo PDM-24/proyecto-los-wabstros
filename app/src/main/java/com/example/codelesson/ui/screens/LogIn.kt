@@ -2,6 +2,7 @@ package com.example.codelesson.ui.screens
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -46,12 +47,24 @@ fun LogIn(
 
     val token by userViewModel.token.collectAsState()
     var isLoading by remember { mutableStateOf(false) }
+    val error by userViewModel.error.collectAsState()
+
+    LaunchedEffect(error) {
+        if (error) {
+            isLoading = false
+            userViewModel.setError()
+        }
+    }
 
     LaunchedEffect(token) {
         if(token.isNotEmpty()){
             practiceViewModel.getToken(token)
             //context.startActivity(Intent(context, MainActivity::class.java))
             navController.navigate(Graph.HOME.graph)
+        } else {
+            Log.d("Login", isLoading.toString())
+            isLoading = false
+            Log.d("Login", isLoading.toString())
         }
     }
 

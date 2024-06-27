@@ -40,11 +40,13 @@ import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.util.PracticeViewModel
+import com.example.codelesson.util.UserViewModel
 
 @Composable
 fun LessonRecap (
     innerPadding: PaddingValues,
     practiceViewModel: PracticeViewModel,
+    userViewModel: UserViewModel,
     navController: NavHostController
 ){
     val exp = remember {
@@ -58,6 +60,7 @@ fun LessonRecap (
     var newExp: ExpUpdateData
 
     LaunchedEffect(true) {
+        Log.d("Exp", exp.value.toString())
         practiceViewModel.getExp()
         when(title) {
             "OUTPUT" -> { addExp = 5 }
@@ -78,6 +81,7 @@ fun LessonRecap (
         newExp = ExpUpdateData(exp.value)
         practiceViewModel.updateExp(newExp)
         practiceViewModel.setLessonStatus(title, true)
+        Log.d("Exp", exp.value.toString())
     }
 
     val backHandlerActive = remember {

@@ -24,6 +24,6 @@ fun NavGraphBuilder.homeGraph(
         }
 
         profileGraph(innerPadding, navController, userViewModel)
-        quizGraph(innerPadding, navController, practiceViewModel)
+        quizGraph(innerPadding, navController, practiceViewModel, userViewModel)
     }
 }

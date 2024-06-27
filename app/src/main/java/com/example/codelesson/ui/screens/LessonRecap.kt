@@ -54,13 +54,13 @@ fun LessonRecap (
         mutableStateOf(practiceViewModel.practiceList.value.recap)
     }
     val title by practiceViewModel.titleTopBar.collectAsState()
-    var addExp: Int = 0
-    var newExp = ExpUpdateData(0)
+    var addExp = 0
+    var newExp: ExpUpdateData
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(true) {
         practiceViewModel.getExp()
         when(title) {
-            "OUTPUT" -> { addExp = 5}
+            "OUTPUT" -> { addExp = 5 }
             "CONDICIONES" -> { addExp = 20}
             "ESTRUCTURA BÁSICA" -> { addExp = 5}
             "COMENTARIOS" -> { addExp = 10}
@@ -77,6 +77,7 @@ fun LessonRecap (
         }
         newExp = ExpUpdateData(exp.value)
         practiceViewModel.updateExp(newExp)
+        practiceViewModel.setLessonStatus(title, true)
     }
 
     val backHandlerActive = remember {

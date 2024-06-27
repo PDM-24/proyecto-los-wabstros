@@ -59,8 +59,6 @@ fun LessonRecap (
 
     LaunchedEffect(key1 = true) {
         practiceViewModel.getExp()
-        Log.d("Titulo", title)
-        Log.d("Old Exp", exp.value.toString())
         when(title) {
             "OUTPUT" -> { addExp = 5}
             "CONDICIONES" -> { addExp = 20}
@@ -77,7 +75,6 @@ fun LessonRecap (
         } else {
             exp.value += addExp
         }
-        Log.d("New Exp", exp.value.toString())
         newExp = ExpUpdateData(exp.value)
         practiceViewModel.updateExp(newExp)
     }

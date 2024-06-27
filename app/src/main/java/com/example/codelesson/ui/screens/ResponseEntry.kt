@@ -1,5 +1,6 @@
 package com.example.codelesson.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.navigation.QuizGraph
@@ -94,7 +96,9 @@ fun ResponseEntry (
 
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
     val index by viewModel.index.collectAsState()
-    val endIndicator by viewModel.endIndicator.collectAsState()
+    val endIndicator = remember {
+        viewModel.endIndicator.value
+    }
     val questionsList by viewModel.questionList.collectAsState()
 
     val splitedCode = remember {
@@ -102,12 +106,18 @@ fun ResponseEntry (
     }
     val correctAnswer = questionsList[endIndicator-1].correctAnswer
 
+    val indication = remember {
+        mutableStateOf(questionsList[endIndicator-1].question)
+    }
+
     val backHandlerActive = remember {
         mutableStateOf(true)
     }
 
     val context = LocalContext.current
 
+    Log.i("Question", "Response question: $questionsList")
+    Log.i("EndIndicator", "Response endIndicator: $endIndicator")
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
 
@@ -127,7 +137,9 @@ fun ResponseEntry (
             Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
         }else{
             navController.navigate(HomeGraph.Home.route){
-                popUpTo(Graph.HOME.graph)
+                popUpTo(Graph.HOME.graph) {
+                    inclusive = true
+                }
             }
         }
     }
@@ -164,7 +176,7 @@ fun ResponseEntry (
 
             ShortIndication(indication = "Completa con la respuesta correcta")
 
-            DetailedIndication(indication = "validacion para entrar al if si n es mayor que 3")
+            DetailedIndication(indication = indication.value)
 
             CodeBlock {
                 Row(
@@ -210,7 +222,7 @@ fun ResponseEntry (
                 minLines = 1,
                 singleLine = true,
                 placeholder = { Text(
-                    text = "Ingrese el error",
+                    text = "Ingrese su respuesta",
                     fontFamily = poppins,
                     fontWeight = FontWeight.Normal,
                     fontSize = 13.sp

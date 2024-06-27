@@ -40,7 +40,7 @@ fun AnswerLabel(text: String, color: State<Color>, animatedColorContainer: State
                 text = text,
                 fontFamily = audioWide,
                 fontWeight = FontWeight.W400,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 lineHeight = 14.sp,
                 textAlign = TextAlign.Center
             )

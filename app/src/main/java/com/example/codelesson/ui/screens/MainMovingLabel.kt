@@ -15,7 +15,7 @@ fun MainMovingLabel(
     DragableScreen {
         MovingLabels(
             innerPadding = innerPadding,
-            practiceViewModel = practiceViewModel,
+            viewModel = practiceViewModel,
             navController = navController
         )
     }

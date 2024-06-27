@@ -1,5 +1,6 @@
 package com.example.codelesson.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -7,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +18,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
@@ -41,8 +47,37 @@ fun LessonRecap (
     practiceViewModel: PracticeViewModel,
     navController: NavHostController
 ){
+    val exp = remember {
+        mutableStateOf(practiceViewModel.exp.value)
+    }
     val recap = remember {
         mutableStateOf(practiceViewModel.practiceList.value.recap)
+    }
+    val title by practiceViewModel.titleTopBar.collectAsState()
+    var addExp = 0
+    var newExp: ExpUpdateData
+
+    LaunchedEffect(true) {
+        practiceViewModel.getExp()
+        when(title) {
+            "OUTPUT" -> { addExp = 5 }
+            "CONDICIONES" -> { addExp = 20}
+            "ESTRUCTURA BÁSICA" -> { addExp = 5}
+            "COMENTARIOS" -> { addExp = 10}
+            "TIPOS DE VARIABLES" -> { addExp = 10}
+            "INPUTS" -> { addExp = 12}
+            "OPERADORES" -> { addExp = 14}
+            "STRINGS" -> { addExp = 14}
+            "BOOLEANOS" -> { addExp = 15}
+        }
+        if (exp.value >= 100) {
+            exp.value = 100
+        } else {
+            exp.value += addExp
+        }
+        newExp = ExpUpdateData(exp.value)
+        practiceViewModel.updateExp(newExp)
+        practiceViewModel.setLessonStatus(title, true)
     }
 
     val backHandlerActive = remember {
@@ -57,7 +92,9 @@ fun LessonRecap (
             Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
         }else{
             navController.navigate(HomeGraph.Home.route){
-                popUpTo(Graph.HOME.graph)
+                popUpTo(Graph.HOME.graph) {
+                    inclusive = true
+                }
             }
         }
     }
@@ -104,9 +141,14 @@ fun LessonRecap (
             )
         }
 
-        //Buton de terminar
+        Spacer(modifier = Modifier.padding(24.dp))
+        //Boton de terminar
         Button(
-            onClick = { navController.navigate(Graph.HOME.graph) },
+            onClick = { navController.navigate(Graph.HOME.graph){
+                popUpTo(Graph.HOME.graph) {
+                    inclusive = true
+                }
+            } },
             shape = MaterialTheme.shapes.large,
             border = BorderStroke(
                 width = 2.dp,

@@ -1,6 +1,7 @@
 package com.example.codelesson.util
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.LessonData
 import com.example.codelesson.data.models.TitleLesson
 import com.example.codelesson.data.remote.api.ApiClient
+import com.example.codelesson.model.LessonStatus
 import com.example.codelesson.model.Practice
 import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.QuizGraph
@@ -85,6 +87,29 @@ class PracticeViewModel : ViewModel() {
 
     private val _endIndicator = MutableStateFlow(0)
     val endIndicator = _endIndicator.asStateFlow()
+
+    private val _lessonStatus = MutableStateFlow(
+        listOf(
+            LessonStatus("ESTRUCTURA BÁSICA", mutableStateOf(false)),
+            LessonStatus("OUTPUT", mutableStateOf(false)),
+            LessonStatus("COMENTARIOS", mutableStateOf(false)),
+            LessonStatus("TIPOS DE VARIABLES", mutableStateOf(false)),
+            LessonStatus("INPUTS", mutableStateOf(false)),
+            LessonStatus("OPERADORES", mutableStateOf(false)),
+            LessonStatus("STRINGS", mutableStateOf(false)),
+            LessonStatus("BOOLEANOS", mutableStateOf(false)),
+            LessonStatus("CONDICIONES", mutableStateOf(false)),
+        )
+    )
+    val lessonStatus = _lessonStatus.asStateFlow()
+
+    fun setLessonStatus(title: String, status: Boolean) {
+        _lessonStatus.value.forEach {
+            if (it.title == title && !it.complete.value) {
+                it.complete.value = status
+            }
+        }
+    }
 
     //When start the app, init var titleList
     init {

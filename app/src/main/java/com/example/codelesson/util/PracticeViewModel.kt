@@ -194,7 +194,20 @@ class PracticeViewModel : ViewModel() {
                 Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
-                
+                val newQuestion = mutableListOf<Question>()
+                var question: Question
+                _getLesson.value.questions.forEach {
+                    question = Question(it.type, it.code, it.question, it.hint, it.correctAnswer, it.options)
+                    newQuestion.add(question)
+                }
+                val newLesson = Practice(
+                    _getLesson.value.title,
+                    _getLesson.value.lesson,
+                    _getLesson.value.recap,
+                    newQuestion
+                )
+                _practiceList.value = newLesson
+                _questionList.value = _practiceList.value.questions.shuffled()
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }
@@ -203,6 +216,10 @@ class PracticeViewModel : ViewModel() {
     //Funcion para obtener el token desde el UserViewModel
     fun getToken(token: String) {
         _token.value = token
+    }
+
+    fun obtainToken() : String {
+        return _token.value
     }
 
     fun getExp() {
@@ -224,6 +241,7 @@ class PracticeViewModel : ViewModel() {
             try {
                 val response = api.updateExp(newExp, "Bearer ${_token.value}")
                 _token.value = response.data.token
+                Log.d("Token", token.value)
             }
             catch (e: Exception) {
                 Log.d("Update Exp", e.message.toString())

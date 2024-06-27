@@ -66,6 +66,7 @@ fun MultipleResponse (
     viewModel: PracticeViewModel,
     navController: NavHostController
 ){
+    val practiceList by viewModel.practiceList.collectAsState()
     val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
 
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
@@ -88,6 +89,7 @@ fun MultipleResponse (
     val context = LocalContext.current
 
     Log.i("Question", "Multiple question: $questionsList")
+    Log.i("Practice", "Multiple response: $practiceList")
     Log.i("EndIndicator", "Response endIndicator: $endIndicator")
     LaunchedEffect(true) {
         viewModel.resetNavRoute()

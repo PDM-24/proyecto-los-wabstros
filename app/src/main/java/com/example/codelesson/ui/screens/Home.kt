@@ -70,14 +70,3 @@ fun Home(
         }
     }
 }
-
-@Preview
-@Composable
-private fun HomePreview() {
-    Home(
-        PaddingValues(),
-        NavHostController(LocalContext.current),
-        PracticeViewModel(),
-        UserViewModel()
-    )
-}

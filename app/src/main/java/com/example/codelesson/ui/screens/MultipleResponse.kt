@@ -114,7 +114,9 @@ fun MultipleResponse (
             Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
         }else{
             navController.navigate(HomeGraph.Home.route){
-                popUpTo(Graph.HOME.graph)
+                popUpTo(Graph.HOME.graph) {
+                    inclusive = true
+                }
             }
         }
     }

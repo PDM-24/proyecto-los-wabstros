@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -71,7 +72,11 @@ fun LessonRecap (
             "STRINGS" -> { addExp = 14}
             "BOOLEANOS" -> { addExp = 15}
         }
-        exp.value += addExp
+        if (exp.value >= 100) {
+            exp.value = 100
+        } else {
+            exp.value += addExp
+        }
         Log.d("New Exp", exp.value.toString())
         newExp = ExpUpdateData(exp.value)
         practiceViewModel.updateExp(newExp)
@@ -89,7 +94,9 @@ fun LessonRecap (
             Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
         }else{
             navController.navigate(HomeGraph.Home.route){
-                popUpTo(Graph.HOME.graph)
+                popUpTo(Graph.HOME.graph) {
+                    inclusive = true
+                }
             }
         }
     }
@@ -136,10 +143,13 @@ fun LessonRecap (
             )
         }
 
-        //Buton de terminar
+        Spacer(modifier = Modifier.padding(24.dp))
+        //Boton de terminar
         Button(
             onClick = { navController.navigate(Graph.HOME.graph){
-                popUpTo(Graph.HOME.graph)
+                popUpTo(Graph.HOME.graph) {
+                    inclusive = true
+                }
             } },
             shape = MaterialTheme.shapes.large,
             border = BorderStroke(

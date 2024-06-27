@@ -22,7 +22,7 @@ class UserViewModel : ViewModel() {
 
     private val _token = MutableStateFlow("")
     val token = _token.asStateFlow()
-    private val _userData = MutableStateFlow(UserData("", "", "", "",))
+    private val _userData = MutableStateFlow(UserData("", "", "", "",0))
     val userData = _userData.asStateFlow()
 
     fun login(data: UserDataLogin, context: Context) {
@@ -96,6 +96,9 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun deleteToke() {
+        _token.value = ""
+    }
     fun updateProfile(userData: UserDataUpdate, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

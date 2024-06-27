@@ -155,8 +155,6 @@ class PracticeViewModel : ViewModel() {
     val getLesson = _getLesson.asStateFlow()
     private val _token = MutableStateFlow("")
     val token = _token.asStateFlow()
-    private val _exp = MutableStateFlow(0)
-    val exp = _exp.asStateFlow()
 
     fun startDragging() {
         _isCurrentlyDragging.value = true
@@ -220,32 +218,5 @@ class PracticeViewModel : ViewModel() {
 
     fun obtainToken() : String {
         return _token.value
-    }
-
-    fun getExp() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = api.getExp("Bearer ${_token.value}")
-                _exp.value = response.data.exp
-                Log.d("Exp", _exp.value.toString())
-            }
-            catch (e: Exception) {
-                Log.d("Exp", e.message.toString())
-            }
-        }
-    }
-    //El parametro sera la nueva exp, la cual se calculara en la screen de congrats
-    //y se le enviara como parametro
-    fun updateExp(newExp: ExpUpdateData) {
-        viewModelScope.launch {
-            try {
-                val response = api.updateExp(newExp, "Bearer ${_token.value}")
-                _token.value = response.data.token
-                Log.d("Token", token.value)
-            }
-            catch (e: Exception) {
-                Log.d("Update Exp", e.message.toString())
-            }
-        }
     }
 }

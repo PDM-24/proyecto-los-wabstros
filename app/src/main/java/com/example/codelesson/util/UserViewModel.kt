@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.PasswordData
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.data.models.UserDataLogin
@@ -26,6 +27,8 @@ class UserViewModel : ViewModel() {
     val userData = _userData.asStateFlow()
     private val _error = MutableStateFlow(_token.value.isEmpty())
     val error = _error.asStateFlow()
+    private val _exp = MutableStateFlow(0)
+    val exp = _exp.asStateFlow()
 
     fun login(data: UserDataLogin, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -79,6 +82,32 @@ class UserViewModel : ViewModel() {
                         context, "There was an error creating the user!", Toast.LENGTH_SHORT
                     ).show()
                 }
+            }
+        }
+    }
+
+    fun updateExp(newExp: ExpUpdateData) {
+        viewModelScope.launch {
+            try {
+                val response = api.updateExp(newExp, "Bearer ${_token.value}")
+                _token.value = response.data.token
+                Log.d("Token", token.value)
+            }
+            catch (e: Exception) {
+                Log.d("Update Exp", e.message.toString())
+            }
+        }
+    }
+
+    fun getExp() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = api.getExp("Bearer ${_token.value}")
+                _exp.value = response.data.exp
+                Log.d("Exp", _exp.value.toString())
+            }
+            catch (e: Exception) {
+                Log.d("Exp", e.message.toString())
             }
         }
     }

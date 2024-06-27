@@ -49,9 +49,7 @@ fun LessonRecap (
     userViewModel: UserViewModel,
     navController: NavHostController
 ){
-    val exp = remember {
-        mutableStateOf(practiceViewModel.exp.value)
-    }
+    val exp by userViewModel.exp.collectAsState()
     val recap = remember {
         mutableStateOf(practiceViewModel.practiceList.value.recap)
     }
@@ -59,9 +57,8 @@ fun LessonRecap (
     var addExp = 0
     var newExp: ExpUpdateData
 
-    LaunchedEffect(true) {
-        Log.d("Exp", exp.value.toString())
-        practiceViewModel.getExp()
+    LaunchedEffect(exp) {
+        userViewModel.getExp()
         when(title) {
             "OUTPUT" -> { addExp = 5 }
             "CONDICIONES" -> { addExp = 20}
@@ -73,15 +70,14 @@ fun LessonRecap (
             "STRINGS" -> { addExp = 14}
             "BOOLEANOS" -> { addExp = 15}
         }
-        if (exp.value >= 100) {
-            exp.value = 100
+        if (exp >= 100) {
+            newExp = ExpUpdateData(100)
         } else {
-            exp.value += addExp
+            newExp = ExpUpdateData(exp + addExp)
         }
-        newExp = ExpUpdateData(exp.value)
-        practiceViewModel.updateExp(newExp)
+        userViewModel.updateExp(newExp)
         practiceViewModel.setLessonStatus(title, true)
-        Log.d("Exp", exp.value.toString())
+        Log.d("Exp", exp.toString())
     }
 
     val backHandlerActive = remember {

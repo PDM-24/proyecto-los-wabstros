@@ -61,9 +61,6 @@ fun Security(innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
         modifier = Modifier
             .padding(innerPadding)
             .fillMaxSize()
-            .clickable {
-
-            }
     ) {
         mainLetters("Seguridad")
 

@@ -24,6 +24,8 @@ class UserViewModel : ViewModel() {
     val token = _token.asStateFlow()
     private val _userData = MutableStateFlow(UserData("", "", "", "",0))
     val userData = _userData.asStateFlow()
+    private val _error = MutableStateFlow(_token.value.isEmpty())
+    val error = _error.asStateFlow()
 
     fun login(data: UserDataLogin, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -33,13 +35,19 @@ class UserViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Login Successfully", Toast.LENGTH_SHORT).show()
                 }
+                _error.value = false
             }
             catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "User not found!", Toast.LENGTH_SHORT).show()
                 }
+                _error.value = true
             }
         }
+    }
+
+    fun setError() {
+        _error.value = false
     }
 
     fun getUser() {

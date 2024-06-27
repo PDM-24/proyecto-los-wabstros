@@ -1,6 +1,7 @@
 package com.example.codelesson.util
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.LessonData
 import com.example.codelesson.data.models.TitleLesson
 import com.example.codelesson.data.remote.api.ApiClient
+import com.example.codelesson.model.LessonStatus
 import com.example.codelesson.model.Practice
 import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.QuizGraph
@@ -85,6 +87,29 @@ class PracticeViewModel : ViewModel() {
 
     private val _endIndicator = MutableStateFlow(0)
     val endIndicator = _endIndicator.asStateFlow()
+
+    private val _lessonStatus = MutableStateFlow(
+        listOf(
+            LessonStatus("ESTRUCTURA BÁSICA", mutableStateOf(false)),
+            LessonStatus("OUTPUT", mutableStateOf(false)),
+            LessonStatus("COMENTARIOS", mutableStateOf(false)),
+            LessonStatus("TIPOS DE VARIABLES", mutableStateOf(false)),
+            LessonStatus("INPUTS", mutableStateOf(false)),
+            LessonStatus("OPERADORES", mutableStateOf(false)),
+            LessonStatus("STRINGS", mutableStateOf(false)),
+            LessonStatus("BOOLEANOS", mutableStateOf(false)),
+            LessonStatus("CONDICIONES", mutableStateOf(false)),
+        )
+    )
+    val lessonStatus = _lessonStatus.asStateFlow()
+
+    fun setLessonStatus(title: String, status: Boolean) {
+        _lessonStatus.value.forEach {
+            if (it.title == title && !it.complete.value) {
+                it.complete.value = status
+            }
+        }
+    }
 
     //When start the app, init var titleList
     init {
@@ -169,7 +194,20 @@ class PracticeViewModel : ViewModel() {
                 Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
-                
+                val newQuestion = mutableListOf<Question>()
+                var question: Question
+                _getLesson.value.questions.forEach {
+                    question = Question(it.type, it.code, it.question, it.hint, it.correctAnswer, it.options)
+                    newQuestion.add(question)
+                }
+                val newLesson = Practice(
+                    _getLesson.value.title,
+                    _getLesson.value.lesson,
+                    _getLesson.value.recap,
+                    newQuestion
+                )
+                _practiceList.value = newLesson
+                _questionList.value = _practiceList.value.questions.shuffled()
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }
@@ -178,6 +216,10 @@ class PracticeViewModel : ViewModel() {
     //Funcion para obtener el token desde el UserViewModel
     fun getToken(token: String) {
         _token.value = token
+    }
+
+    fun obtainToken() : String {
+        return _token.value
     }
 
     fun getExp() {
@@ -199,6 +241,7 @@ class PracticeViewModel : ViewModel() {
             try {
                 val response = api.updateExp(newExp, "Bearer ${_token.value}")
                 _token.value = response.data.token
+                Log.d("Token", token.value)
             }
             catch (e: Exception) {
                 Log.d("Update Exp", e.message.toString())

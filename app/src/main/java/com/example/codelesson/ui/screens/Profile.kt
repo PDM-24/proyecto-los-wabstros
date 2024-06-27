@@ -1,8 +1,5 @@
 package com.example.codelesson.ui.screens
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +21,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.codelesson.R
-import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.LoginGraph
 import com.example.codelesson.ui.components.navigation.ProfileGraph
 import com.example.codelesson.ui.components.profileComponents.dataLetters
@@ -61,6 +58,12 @@ fun Profile (
     viewModel: UserViewModel,
     navController: NavHostController
 ){
+    val token by viewModel.token.collectAsState()
+
+    LaunchedEffect(token) {
+        viewModel.getUser()
+    }
+
     val userData by viewModel.userData.collectAsState()
     LazyColumn (
         modifier = Modifier
@@ -114,7 +117,6 @@ fun Profile (
                 Column (
                     modifier = Modifier
                         .weight(0.5f)
-                    //.background(color = Color.White)
                 ){
                     dataLetters(name = userData.name)
                     secondaryLetters(name = "Nombre")

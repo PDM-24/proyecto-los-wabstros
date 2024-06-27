@@ -1,5 +1,6 @@
 package com.example.codelesson.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
 import com.example.codelesson.ui.theme.DarkGrey
@@ -36,14 +38,14 @@ fun Theory(
     }
     val nextRoute by viewModel.nextNavigationRoute.collectAsState()
 
-    val index by viewModel.index.collectAsState()
-
     if(nextRoute == "")
         viewModel.verifyTypeOfQuestion(0)
 
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
         viewModel.resetIndex()
+
+        Log.i("Teoria", "ruta: $nextRoute lesson: $lesson")
     }
 
     Column(

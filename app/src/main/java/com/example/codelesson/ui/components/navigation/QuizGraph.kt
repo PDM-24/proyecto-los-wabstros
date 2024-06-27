@@ -11,12 +11,14 @@ import com.example.codelesson.ui.screens.MultipleResponse
 import com.example.codelesson.ui.screens.ResponseEntry
 import com.example.codelesson.ui.screens.Theory
 import com.example.codelesson.util.PracticeViewModel
+import com.example.codelesson.util.UserViewModel
 
 
 fun NavGraphBuilder.quizGraph(
     innerPadding: PaddingValues,
     navController: NavHostController,
-    practiceViewModel: PracticeViewModel
+    practiceViewModel: PracticeViewModel,
+    userViewModel: UserViewModel
 ) {
     navigation(
         route = Graph.QUIZ.graph,
@@ -39,7 +41,7 @@ fun NavGraphBuilder.quizGraph(
         }
 
         composable(QuizGraph.LessonRecap.route) {
-            LessonRecap(innerPadding, practiceViewModel, navController)
+            LessonRecap(innerPadding, practiceViewModel, userViewModel , navController)
         }
     }
 }

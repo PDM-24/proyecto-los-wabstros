@@ -72,7 +72,6 @@ class MainActivity : ComponentActivity() {
                             ) { bottomNavItems ->
                                 navController.navigate(bottomNavItems.route) {
                                     viewModel.setTitle(bottomNavItems.title)
-                                    Log.d("DEBUG", bottomNavItems.title)
                                     navController.graph.startDestinationRoute?.let { startDestinationRoute ->
                                         popUpTo(startDestinationRoute) {
                                             saveState = true

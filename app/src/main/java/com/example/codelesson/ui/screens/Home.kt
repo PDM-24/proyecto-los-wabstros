@@ -58,7 +58,6 @@ fun Home(
                     viewModel
                 ) {
                     lifeCycleScope.launch {
-                        Log.d("Lesson", it.id)
                         viewModel.setId(it.id)
                         viewModel.setTitle(it.title.uppercase())
                         viewModel.getLesson()

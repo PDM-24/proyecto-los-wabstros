@@ -77,7 +77,6 @@ fun LessonRecap (
         }
         userViewModel.updateExp(newExp)
         practiceViewModel.setLessonStatus(title, true)
-        Log.d("Exp", exp.toString())
     }
 
     val backHandlerActive = remember {

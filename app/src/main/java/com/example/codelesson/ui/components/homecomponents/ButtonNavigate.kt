@@ -44,7 +44,6 @@ fun ButtonNavigate(
         list.forEach {
             if (it.title == name.uppercase() && it.complete.value) {
                 status.value = true
-                Log.d("Boton", status.value.toString())
             }
         }
     }

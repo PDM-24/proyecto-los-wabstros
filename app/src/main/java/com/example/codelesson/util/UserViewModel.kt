@@ -91,7 +91,6 @@ class UserViewModel : ViewModel() {
             try {
                 val response = api.updateExp(newExp, "Bearer ${_token.value}")
                 _token.value = response.data.token
-                Log.d("Token", token.value)
             }
             catch (e: Exception) {
                 Log.d("Update Exp", e.message.toString())
@@ -104,7 +103,6 @@ class UserViewModel : ViewModel() {
             try {
                 val response = api.getExp("Bearer ${_token.value}")
                 _exp.value = response.data.exp
-                Log.d("Exp", _exp.value.toString())
             }
             catch (e: Exception) {
                 Log.d("Exp", e.message.toString())

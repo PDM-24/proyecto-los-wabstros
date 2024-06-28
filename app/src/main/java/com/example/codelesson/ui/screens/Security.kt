@@ -99,7 +99,6 @@ fun Security(innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                     message(context, mensaje = "Ingrese todos los datos")
                     erasePassword.value = true
                     KeyboardFunctions.ClearFocus(focusManager, focused)
-                    Log.d("TAG", "Algun campo esta vacio")
                 }
             }
         }

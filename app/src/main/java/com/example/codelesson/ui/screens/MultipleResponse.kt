@@ -88,9 +88,6 @@ fun MultipleResponse (
 
     val context = LocalContext.current
 
-    Log.i("Question", "Multiple question: $questionsList")
-    Log.i("Practice", "Multiple response: $practiceList")
-    Log.i("EndIndicator", "Response endIndicator: $endIndicator")
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
 

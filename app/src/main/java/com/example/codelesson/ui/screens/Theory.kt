@@ -44,8 +44,6 @@ fun Theory(
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
         viewModel.resetIndex()
-
-        Log.i("Teoria", "ruta: $nextRoute lesson: $lesson")
     }
 
     Column(

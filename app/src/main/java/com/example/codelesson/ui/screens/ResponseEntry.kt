@@ -117,9 +117,6 @@ fun ResponseEntry (
 
     val context = LocalContext.current
 
-    Log.i("Question", "Response question: $questionsList")
-    Log.i("Practice", "Response response: $practiceList")
-    Log.i("EndIndicator", "Response endIndicator: $endIndicator")
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
 

@@ -146,7 +146,6 @@ class PracticeViewModel : ViewModel() {
     private val _titleList = MutableStateFlow<List<TitleLesson>>(emptyList())
     val titleList = _titleList.asStateFlow()
     private val _getId = MutableStateFlow("")
-    val getId = _getId.asStateFlow()
     private val _getLesson = MutableStateFlow(
         LessonData(
             "", "", "", "", emptyList()
@@ -176,7 +175,6 @@ class PracticeViewModel : ViewModel() {
             try {
                 val response = api.getLessonTitle()
                 _titleList.value = response.data
-                Log.d("Title", _titleList.toString())
             } catch (e: Exception) {
                 Log.d("Get Title", e.message.toString())
             }
@@ -189,7 +187,6 @@ class PracticeViewModel : ViewModel() {
     fun getLesson() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
                 val newQuestion = mutableListOf<Question>()

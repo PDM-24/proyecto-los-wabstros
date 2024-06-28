@@ -62,9 +62,7 @@ fun LogIn(
             //context.startActivity(Intent(context, MainActivity::class.java))
             navController.navigate(Graph.HOME.graph)
         } else {
-            Log.d("Login", isLoading.toString())
             isLoading = false
-            Log.d("Login", isLoading.toString())
         }
     }
 

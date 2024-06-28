@@ -86,10 +86,6 @@ fun MovingLabels (
             mutableStateOf(true)
         }
 
-
-        Log.i("Question", "Labels response: $questionsList")
-        Log.i("Practice", "Labels response: $practiceList")
-        Log.i("EndIndicator", "Response endIndicator: $endIndicator")
         Hint(
             hint = questionsList[endIndicator-1].hint,
             isIncorrect = !isCorrect

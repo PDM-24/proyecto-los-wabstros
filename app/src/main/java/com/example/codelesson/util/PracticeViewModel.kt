@@ -116,6 +116,19 @@ class PracticeViewModel : ViewModel() {
         getTitle()
     }
 
+    fun checkLessonStatus(title: String) : Boolean{
+        var status = false
+         _lessonStatus.value.forEach {
+             status = if (it.title == title) {
+                 it.complete.value
+             } else {
+                 false
+             }
+        }
+
+        return status
+    }
+
     fun resetIndex(){
         _index.value = 0
         _endIndicator.value = 0

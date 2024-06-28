@@ -41,14 +41,15 @@ import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
+import kotlinx.coroutines.delay
 
 @Composable
-fun LessonRecap (
+fun LessonRecap(
     innerPadding: PaddingValues,
     practiceViewModel: PracticeViewModel,
     userViewModel: UserViewModel,
-    navController: NavHostController
-){
+    navController: NavHostController,
+) {
     val exp by userViewModel.exp.collectAsState()
     val recap = remember {
         mutableStateOf(practiceViewModel.practiceList.value.recap)
@@ -57,26 +58,58 @@ fun LessonRecap (
     var addExp = 0
     var newExp: ExpUpdateData
 
-    LaunchedEffect(exp) {
+    LaunchedEffect(Unit) {
         userViewModel.getExp()
-        when(title) {
-            "OUTPUT" -> { addExp = 5 }
-            "CONDICIONES" -> { addExp = 20}
-            "ESTRUCTURA BÁSICA" -> { addExp = 5}
-            "COMENTARIOS" -> { addExp = 10}
-            "TIPOS DE VARIABLES" -> { addExp = 10}
-            "INPUTS" -> { addExp = 12}
-            "OPERADORES" -> { addExp = 14}
-            "STRINGS" -> { addExp = 14}
-            "BOOLEANOS" -> { addExp = 15}
-        }
-        if (exp >= 100) {
-            newExp = ExpUpdateData(100)
+        delay(1000)
+
+        if (practiceViewModel.checkLessonStatus(title)) {
+            return@LaunchedEffect
         } else {
-            newExp = ExpUpdateData(exp + addExp)
+            when (title) {
+                "OUTPUT" -> {
+                    addExp = 5
+                }
+
+                "CONDICIONES" -> {
+                    addExp = 20
+                }
+
+                "ESTRUCTURA BÁSICA" -> {
+                    addExp = 5
+                }
+
+                "COMENTARIOS" -> {
+                    addExp = 10
+                }
+
+                "TIPOS DE VARIABLES" -> {
+                    addExp = 10
+                }
+
+                "INPUTS" -> {
+                    addExp = 12
+                }
+
+                "OPERADORES" -> {
+                    addExp = 14
+                }
+
+                "STRINGS" -> {
+                    addExp = 14
+                }
+
+                "BOOLEANOS" -> {
+                    addExp = 15
+                }
+            }
+            if (exp >= 100) {
+                newExp = ExpUpdateData(100)
+            } else {
+                newExp = ExpUpdateData(exp + addExp)
+            }
+            userViewModel.updateExp(newExp)
+            practiceViewModel.setLessonStatus(title, true)
         }
-        userViewModel.updateExp(newExp)
-        practiceViewModel.setLessonStatus(title, true)
     }
 
     val backHandlerActive = remember {
@@ -85,12 +118,16 @@ fun LessonRecap (
 
     val context = LocalContext.current
 
-    BackHandler{
-        if(backHandlerActive.value){
+    BackHandler {
+        if (backHandlerActive.value) {
             backHandlerActive.value = false
-            Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
-        }else{
-            navController.navigate(HomeGraph.Home.route){
+            Toast.makeText(
+                context,
+                "Presiona de nuevo para regresar al menú principal",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            navController.navigate(HomeGraph.Home.route) {
                 popUpTo(Graph.HOME.graph) {
                     inclusive = true
                 }
@@ -143,11 +180,13 @@ fun LessonRecap (
         Spacer(modifier = Modifier.padding(24.dp))
         //Boton de terminar
         Button(
-            onClick = { navController.navigate(Graph.HOME.graph){
-                popUpTo(Graph.HOME.graph) {
-                    inclusive = true
+            onClick = {
+                navController.navigate(Graph.HOME.graph) {
+                    popUpTo(Graph.HOME.graph) {
+                        inclusive = true
+                    }
                 }
-            } },
+            },
             shape = MaterialTheme.shapes.large,
             border = BorderStroke(
                 width = 2.dp,

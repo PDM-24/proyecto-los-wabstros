@@ -63,6 +63,7 @@ fun EditProfile(
     navController: NavHostController,
 ) {
     val state by viewModel.userData.collectAsState()
+    val complete by viewModel.completeExp.collectAsState()
     Column(
         modifier = Modifier
             .padding(innerPadding)
@@ -112,19 +113,18 @@ fun EditProfile(
 
         profilBbutton("Actualizar") {
             if (nombreUsuario != "" && apellidoUsuario != "" && emailUsuario != "") {
-                lifeCycleScope.launch {
-                    val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
-                    viewModel.updateProfile(data, context)
-                    message(context, "Datos actualizados")
-                    viewModel.getUser()
-                    delay(500)
-                    navController.popBackStack()
-                }
+                val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
+                viewModel.updateProfile(data, context)
+                viewModel.getUser()
             } else {
                 emptyFieldText.value = false
                 message(context, "Complete todos los datos")
             }
         }
+    }
+    if (complete) {
+        viewModel.setCompleteExp(false)
+        navController.popBackStack()
     }
 }
 

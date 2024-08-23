@@ -74,6 +74,9 @@ class PracticeViewModel : ViewModel() {
         )
     )
 
+    private val _completed = MutableStateFlow(false)
+    val completed = _completed.asStateFlow()
+
     val practiceList = _practiceList.asStateFlow()
 
     private val _questionList = MutableStateFlow(_practiceList.value.questions.shuffled())
@@ -114,6 +117,10 @@ class PracticeViewModel : ViewModel() {
     //When start the app, init var titleList
     init {
         getTitle()
+    }
+
+    fun setCompleted(status: Boolean) {
+        _completed.value = status
     }
 
     fun checkLessonStatus(title: String) : Boolean{
@@ -216,6 +223,7 @@ class PracticeViewModel : ViewModel() {
                 )
                 _practiceList.value = newLesson
                 _questionList.value = _practiceList.value.questions.shuffled()
+                _completed.value = true
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }

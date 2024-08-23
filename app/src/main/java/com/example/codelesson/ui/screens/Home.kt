@@ -35,12 +35,16 @@ import kotlinx.coroutines.launch
 fun Home(
     innerPadding: PaddingValues,
     navController: NavHostController,
-    viewModel: PracticeViewModel
+    viewModel: PracticeViewModel,
+    userViewModel: UserViewModel,
 ) {
     val titleList by viewModel.titleList.collectAsState()
+    val status by viewModel.completed.collectAsState()
+    LaunchedEffect(Unit) {
+        userViewModel.getUser()
+    }
 
     CodeLessonTheme {
-        val lifeCycleScope = LocalLifecycleOwner.current.lifecycleScope
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -57,15 +61,15 @@ fun Home(
                     it.title,
                     viewModel
                 ) {
-                    lifeCycleScope.launch {
-                        viewModel.setId(it.id)
-                        viewModel.setTitle(it.title.uppercase())
-                        viewModel.getLesson()
-                        delay(600)
-                        navController.navigate(QuizGraph.Theory.route)
-                    }
+                    viewModel.setId(it.id)
+                    viewModel.setTitle(it.title.uppercase())
+                    viewModel.getLesson()
                 }
             }
+        }
+        if (status) {
+            navController.navigate(QuizGraph.Theory.route)
+            viewModel.setCompleted(false)
         }
     }
 }

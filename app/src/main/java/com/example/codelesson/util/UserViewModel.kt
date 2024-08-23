@@ -29,6 +29,10 @@ class UserViewModel : ViewModel() {
     val error = _error.asStateFlow()
     private val _exp = MutableStateFlow(0)
     val exp = _exp.asStateFlow()
+    private val _state = MutableStateFlow(false)
+    val state = _state.asStateFlow()
+    private val _completeExp = MutableStateFlow(false)
+    val completeExp = _completeExp.asStateFlow()
 
     fun login(data: UserDataLogin, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -95,7 +99,13 @@ class UserViewModel : ViewModel() {
             catch (e: Exception) {
                 Log.d("Update Exp", e.message.toString())
             }
+            _state.value = true
+            getUser()
         }
+    }
+
+    fun setCompleteExp(condition: Boolean) {
+        _completeExp.value = false
     }
 
     fun getExp() {
@@ -107,6 +117,7 @@ class UserViewModel : ViewModel() {
             catch (e: Exception) {
                 Log.d("Exp", e.message.toString())
             }
+            _completeExp.value = true
         }
     }
 
@@ -134,6 +145,10 @@ class UserViewModel : ViewModel() {
     fun deleteToke() {
         _token.value = ""
     }
+
+    fun setStatusLesson(condition: Boolean) {
+        _state.value = condition
+    }
     fun updateProfile(userData: UserDataUpdate, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -144,6 +159,7 @@ class UserViewModel : ViewModel() {
                         context,"Data was updated successfully", Toast.LENGTH_SHORT
                     ).show()
                 }
+                _completeExp.value = true
             }
             catch (e: Exception) {
                 withContext(Dispatchers.Main) {

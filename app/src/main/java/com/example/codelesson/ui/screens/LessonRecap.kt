@@ -21,8 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,62 +56,65 @@ fun LessonRecap(
     val recap = remember {
         mutableStateOf(practiceViewModel.practiceList.value.recap)
     }
+    val state by userViewModel.state.collectAsState()
     val title by practiceViewModel.titleTopBar.collectAsState()
     var addExp = 0
     var newExp: ExpUpdateData
+    var conditionButton by remember {
+        mutableStateOf(false)
+    }
+    val complete by userViewModel.completeExp.collectAsState()
 
     LaunchedEffect(Unit) {
         userViewModel.getExp()
-        delay(1000)
+    }
 
-        if (practiceViewModel.checkLessonStatus(title)) {
-            return@LaunchedEffect
-        } else {
-            when (title) {
-                "OUTPUT" -> {
-                    addExp = 5
-                }
-
-                "CONDICIONES" -> {
-                    addExp = 20
-                }
-
-                "ESTRUCTURA BÁSICA" -> {
-                    addExp = 5
-                }
-
-                "COMENTARIOS" -> {
-                    addExp = 10
-                }
-
-                "TIPOS DE VARIABLES" -> {
-                    addExp = 10
-                }
-
-                "INPUTS" -> {
-                    addExp = 12
-                }
-
-                "OPERADORES" -> {
-                    addExp = 14
-                }
-
-                "STRINGS" -> {
-                    addExp = 14
-                }
-
-                "BOOLEANOS" -> {
-                    addExp = 15
-                }
-            }
-            if (exp >= 100) {
-                newExp = ExpUpdateData(100)
-            } else {
-                newExp = ExpUpdateData(exp + addExp)
-            }
-            userViewModel.updateExp(newExp)
-            practiceViewModel.setLessonStatus(title, true)
+    when (title) {
+        "OUTPUT" -> {
+            addExp = 5
         }
+
+        "CONDICIONES" -> {
+            addExp = 20
+        }
+
+        "ESTRUCTURA BÁSICA" -> {
+            addExp = 5
+        }
+
+        "COMENTARIOS" -> {
+            addExp = 10
+        }
+
+        "TIPOS DE VARIABLES" -> {
+            addExp = 10
+        }
+
+        "INPUTS" -> {
+            addExp = 12
+        }
+
+        "OPERADORES" -> {
+            addExp = 14
+        }
+
+        "STRINGS" -> {
+            addExp = 14
+        }
+
+        "BOOLEANOS" -> {
+            addExp = 15
+        }
+    }
+    if (complete) {
+        val total = exp + addExp
+        if (total >= 100) {
+            newExp = ExpUpdateData(0)
+        } else {
+            newExp = ExpUpdateData(total)
+        }
+        userViewModel.updateExp(newExp)
+        practiceViewModel.setLessonStatus(title, true)
     }
 
     val backHandlerActive = remember {
@@ -181,11 +186,7 @@ fun LessonRecap(
         //Boton de terminar
         Button(
             onClick = {
-                navController.navigate(Graph.HOME.graph) {
-                    popUpTo(Graph.HOME.graph) {
-                        inclusive = true
-                    }
-                }
+                conditionButton = true
             },
             shape = MaterialTheme.shapes.large,
             border = BorderStroke(
@@ -210,5 +211,15 @@ fun LessonRecap(
                 )
             )
         }
+    }
+    if (state && conditionButton && complete) {
+        navController.navigate(Graph.HOME.graph) {
+            popUpTo(Graph.HOME.graph) {
+                inclusive = true
+            }
+        }
+        userViewModel.setStatusLesson(false)
+        conditionButton = false
+        userViewModel.setCompleteExp(false)
     }
 }

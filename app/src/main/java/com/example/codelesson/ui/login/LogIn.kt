@@ -55,7 +55,6 @@ fun LogIn(
     LaunchedEffect(token) {
         if(token.isNotEmpty()){
             practiceViewModel.getToken(token)
-            //context.startActivity(Intent(context, MainActivity::class.java))
             navController.navigate(Graph.HOME.graph)
         } else {
             isLoading = false
@@ -114,6 +113,8 @@ fun LogIn(
 
                 Button(
                     onClick = {
+                        login = login.trimEnd()
+                        password = password.trimEnd()
                         if (login.isNotEmpty() && password.isNotEmpty() ) {
                             isLoading = true
                             userViewModel.login(UserDataLogin(login, password), context)
@@ -153,7 +154,7 @@ fun LogIn(
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontFamily = poppins,
-                        color = Color(0xFF717171)
+                        color = Color(0xFFE2E2E2)
                     ),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -163,7 +164,7 @@ fun LogIn(
                     shape = MaterialTheme.shapes.large,
                     border = BorderStroke(
                         width = 2.dp,
-                        color = Color(0xFF717171),
+                        color = Color(0xFFE2E2E2),
                     ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF1E1E1E)
@@ -179,7 +180,7 @@ fun LogIn(
                             fontSize = 16.sp,
                             fontFamily = audioWide,
                             fontWeight = FontWeight(500),
-                            color = Color(0xFF717171)
+                            color = Color(0xFFE2E2E2)
                         )
                     )
                 }

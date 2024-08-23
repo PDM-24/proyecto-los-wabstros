@@ -16,6 +16,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.codelesson.R
@@ -34,9 +35,9 @@ fun UserTextField(
         onValueChange = onChange,
 
         placeholder = { Text(text = placeholder,
-            color = Color(0xFF8E8E8E)) },
+            color = Color(0xFFE2E2E2)) },
 
-        label = { Text(label, color = Color(0xFFB6B6B6)) },
+        label = { Text(label, color = Color(0xFFFFFDFD)) },
 
         modifier = Modifier
             .fillMaxWidth()
@@ -48,8 +49,12 @@ fun UserTextField(
         ),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color(0xFF8E8E8E),
-            cursorColor = Color(0xFFB6B6B6),
-            focusedIndicatorColor = Color(0xFFFFFFFF)
+            cursorColor = Color(0xFFFFFDFD),
+            focusedIndicatorColor = Color(0xFFFFFDFD),
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        textStyle = TextStyle(
+            color = Color(0xFFFFFDFD)
         )
     )
 }

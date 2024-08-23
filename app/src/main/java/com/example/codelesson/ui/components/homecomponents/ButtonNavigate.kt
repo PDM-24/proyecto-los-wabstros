@@ -55,7 +55,7 @@ fun ButtonNavigate(
         if (status.value) {
             BorderStroke(2.dp, NeonGreen)
         } else {
-            BorderStroke(2.dp, MoreTransparentWhite)
+            BorderStroke(2.dp, Color.White)
         },
         onClick = { onClick() },
     ) {
@@ -72,7 +72,7 @@ fun ButtonNavigate(
                 if (status.value) {
                     NeonGreen
                 } else {
-                    MoreTransparentWhite
+                    Color.White
                 }
             )
         }

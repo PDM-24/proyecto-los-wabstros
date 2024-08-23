@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -44,7 +45,7 @@ fun PasswordField(
     val trailingIcon = @Composable {
         IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
             Icon(
-                painter = if (isPasswordVisible)
+                painter = if (!isPasswordVisible)
                     painterResource(id = R.drawable.ic_visibility_off)
                 else
                     painterResource(id = R.drawable.ic_visibility_on),
@@ -69,13 +70,17 @@ fun PasswordField(
         keyboardActions = KeyboardActions(
             onDone = { submit() }
         ),
-        label = { Text(label, color = Color(0xFFB6B6B6)) },
+        label = { Text(label, color = Color(0xFFFFFDFD)) },
         singleLine = true,
         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color(0xFF8E8E8E),
-            cursorColor = Color(0xFFB6B6B6),
-            focusedIndicatorColor = Color(0xFFFFFFFF)
+            cursorColor = Color(0xFFFFFDFD),
+            focusedIndicatorColor = Color(0xFFFFFDFD),
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        textStyle = TextStyle(
+            color = Color(0xFFFFFDFD)
         )
     )
 }

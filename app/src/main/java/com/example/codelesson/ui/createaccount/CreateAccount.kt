@@ -1,4 +1,4 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.createaccount
 
 import android.widget.Toast
 import androidx.compose.foundation.Image

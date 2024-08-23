@@ -1,8 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.login
 
-import android.app.Activity
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.codelesson.MainActivity
 import com.example.codelesson.R
 import com.example.codelesson.data.models.UserDataLogin
 import com.example.codelesson.ui.components.logincomponents.PasswordField

@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.theory
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.practicecomponents.BlackBoxText
 import com.example.codelesson.ui.components.practicecomponents.CodeBlock
+import com.example.codelesson.ui.profile.profilBbutton
 import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.util.PracticeViewModel
 

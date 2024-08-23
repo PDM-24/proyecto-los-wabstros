@@ -1,4 +1,4 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

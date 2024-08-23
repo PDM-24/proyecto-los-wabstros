@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.editprofile
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -45,10 +44,9 @@ import com.example.codelesson.R
 import com.example.codelesson.data.models.UserDataUpdate
 import com.example.codelesson.ui.components.profileComponents.mainLetters
 import com.example.codelesson.ui.components.profileComponents.message
+import com.example.codelesson.ui.profile.profilBbutton
 import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.util.UserViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 var nombreUsuario: String = ""
 var apellidoUsuario: String = ""

@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.lessonrecap
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -21,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,7 +41,6 @@ import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
-import kotlinx.coroutines.delay
 
 @Composable
 fun LessonRecap(

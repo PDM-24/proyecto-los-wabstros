@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.movinglabels
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background

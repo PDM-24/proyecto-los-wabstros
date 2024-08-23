@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.codelesson.ui.screens.Home
+import com.example.codelesson.ui.home.Home
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
 

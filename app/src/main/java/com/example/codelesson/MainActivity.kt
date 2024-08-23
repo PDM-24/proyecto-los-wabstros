@@ -28,7 +28,11 @@ import com.example.codelesson.ui.theme.DividerPurple
 import com.example.codelesson.ui.theme.TopBarGrey
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+//Prepara a la activity para poder inyectarle las dependencias que se vayan a proveer
+//con dagger
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

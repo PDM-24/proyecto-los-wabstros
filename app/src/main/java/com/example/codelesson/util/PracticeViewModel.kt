@@ -9,14 +9,17 @@ import com.example.codelesson.data.models.ExpUpdateData
 import com.example.codelesson.data.models.LessonData
 import com.example.codelesson.data.models.TitleLesson
 import com.example.codelesson.data.remote.api.ApiClient
+import com.example.codelesson.data.remote.api.ApiService
 import com.example.codelesson.model.LessonStatus
 import com.example.codelesson.model.Practice
 import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.QuizGraph
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class PracticeViewModel : ViewModel() {
     private val api = ApiClient.ApiClient
@@ -225,7 +228,6 @@ class PracticeViewModel : ViewModel() {
                 _questionList.value = _practiceList.value.questions.shuffled()
                 _completed.value = true
             } catch (e: Exception) {
-                Log.d("Get Lesson", e.message.toString())
             }
         }
     }

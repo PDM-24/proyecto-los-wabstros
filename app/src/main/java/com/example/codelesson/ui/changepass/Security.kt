@@ -1,7 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.changepass
 
-import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.codelesson.data.models.PasswordData
-import com.example.codelesson.ui.components.navigation.ProfileGraph
 import com.example.codelesson.ui.components.profileComponents.mainLetters
 import com.example.codelesson.ui.components.profileComponents.message
+import com.example.codelesson.ui.profile.profilBbutton
 import com.example.codelesson.util.KeyboardFunctions
 import com.example.codelesson.util.UserViewModel
 
@@ -84,7 +82,10 @@ fun Security(innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
             val context = LocalContext.current
 
             profilBbutton("ACTUALIZAR") {
-                if (checkedEmptyPassword(newPassword) && checkedEmptyPassword(confirmPassword) && checkedEmptyPassword(userPassword)){
+                if (checkedEmptyPassword(newPassword) && checkedEmptyPassword(confirmPassword) && checkedEmptyPassword(
+                        userPassword
+                    )
+                ){
                     if (checkedNewPassword(newPassword, confirmPassword)){
                         var userPassword = PasswordData(userPassword, newPassword)
                         viewModel.updatePassword(userPassword, context)
@@ -99,7 +100,6 @@ fun Security(innerPadding: PaddingValues, viewModel: UserViewModel, navControlle
                     message(context, mensaje = "Ingrese todos los datos")
                     erasePassword.value = true
                     KeyboardFunctions.ClearFocus(focusManager, focused)
-                    Log.d("TAG", "Algun campo esta vacio")
                 }
             }
         }

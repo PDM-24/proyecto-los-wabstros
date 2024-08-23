@@ -1,4 +1,4 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -152,6 +153,7 @@ fun Profile (
                     profilBbutton(name = "SEGURIDAD") {
                         navController.navigate(ProfileGraph.Security.route)
                     }
+                    Spacer(modifier = Modifier.padding(4.dp))
                     profilBbutton(name = "CERRAR SESION") {
                         viewModel.deleteToke()
                         navController.navigate(LoginGraph.Login.route) {
@@ -178,13 +180,13 @@ fun Profile (
                         Text(
                             fontFamily = audioWide,
                             text = "Editar",
-                            color = FormWhite,
+                            color = Color(0xFFE2E2E2),
                             fontSize = 15.sp
                         )
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.edit_pen),
                             contentDescription = "edit",
-                            tint =  FormWhite
+                            tint =  Color(0xFFE2E2E2)
                         )
                     }
                 }
@@ -221,14 +223,14 @@ fun profilBbutton(name : String, onClick: () -> Unit ) {
             .width(200.dp),
         colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple1, contentColor = Color.White),
         onClick = {
-
             onClick()
         }
     ) {
         Text(
             text = name,
             fontFamily = audioWide,
-            fontSize = 13.sp
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center
         )
     }
 }

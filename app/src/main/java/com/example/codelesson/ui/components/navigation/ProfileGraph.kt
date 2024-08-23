@@ -5,9 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.codelesson.ui.screens.EditProfile
-import com.example.codelesson.ui.screens.Profile
-import com.example.codelesson.ui.screens.Security
+import com.example.codelesson.ui.editprofile.EditProfile
+import com.example.codelesson.ui.profile.Profile
+import com.example.codelesson.ui.changepass.Security
 import com.example.codelesson.util.UserViewModel
 
 fun NavGraphBuilder.profileGraph(

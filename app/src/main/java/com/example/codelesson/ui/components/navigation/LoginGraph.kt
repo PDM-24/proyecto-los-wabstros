@@ -4,8 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.codelesson.ui.screens.CreateAccount
-import com.example.codelesson.ui.screens.LogIn
+import com.example.codelesson.ui.createaccount.CreateAccount
+import com.example.codelesson.ui.login.LogIn
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
 

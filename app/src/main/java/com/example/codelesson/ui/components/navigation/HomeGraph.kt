@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.codelesson.ui.screens.Home
+import com.example.codelesson.ui.home.Home
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
 
@@ -20,7 +20,7 @@ fun NavGraphBuilder.homeGraph(
         startDestination = HomeGraph.Home.route
     ) {
         composable(HomeGraph.Home.route) {
-            Home(innerPadding, navController, practiceViewModel)
+            Home(innerPadding, navController, practiceViewModel, userViewModel)
         }
 
         profileGraph(innerPadding, navController, userViewModel)

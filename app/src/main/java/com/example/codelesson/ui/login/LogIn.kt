@@ -1,8 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.login
 
-import android.app.Activity
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.codelesson.MainActivity
 import com.example.codelesson.R
 import com.example.codelesson.data.models.UserDataLogin
 import com.example.codelesson.ui.components.logincomponents.PasswordField
@@ -59,12 +55,9 @@ fun LogIn(
     LaunchedEffect(token) {
         if(token.isNotEmpty()){
             practiceViewModel.getToken(token)
-            //context.startActivity(Intent(context, MainActivity::class.java))
             navController.navigate(Graph.HOME.graph)
         } else {
-            Log.d("Login", isLoading.toString())
             isLoading = false
-            Log.d("Login", isLoading.toString())
         }
     }
 
@@ -120,6 +113,8 @@ fun LogIn(
 
                 Button(
                     onClick = {
+                        login = login.trimEnd()
+                        password = password.trimEnd()
                         if (login.isNotEmpty() && password.isNotEmpty() ) {
                             isLoading = true
                             userViewModel.login(UserDataLogin(login, password), context)
@@ -159,7 +154,7 @@ fun LogIn(
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontFamily = poppins,
-                        color = Color(0xFF717171)
+                        color = Color(0xFFE2E2E2)
                     ),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -169,7 +164,7 @@ fun LogIn(
                     shape = MaterialTheme.shapes.large,
                     border = BorderStroke(
                         width = 2.dp,
-                        color = Color(0xFF717171),
+                        color = Color(0xFFE2E2E2),
                     ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF1E1E1E)
@@ -185,7 +180,7 @@ fun LogIn(
                             fontSize = 16.sp,
                             fontFamily = audioWide,
                             fontWeight = FontWeight(500),
-                            color = Color(0xFF717171)
+                            color = Color(0xFFE2E2E2)
                         )
                     )
                 }

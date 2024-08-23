@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.editprofile
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -45,10 +44,9 @@ import com.example.codelesson.R
 import com.example.codelesson.data.models.UserDataUpdate
 import com.example.codelesson.ui.components.profileComponents.mainLetters
 import com.example.codelesson.ui.components.profileComponents.message
+import com.example.codelesson.ui.profile.profilBbutton
 import com.example.codelesson.ui.theme.DarkGrey
 import com.example.codelesson.util.UserViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 var nombreUsuario: String = ""
 var apellidoUsuario: String = ""
@@ -63,6 +61,7 @@ fun EditProfile(
     navController: NavHostController,
 ) {
     val state by viewModel.userData.collectAsState()
+    val complete by viewModel.completeExp.collectAsState()
     Column(
         modifier = Modifier
             .padding(innerPadding)
@@ -112,19 +111,18 @@ fun EditProfile(
 
         profilBbutton("Actualizar") {
             if (nombreUsuario != "" && apellidoUsuario != "" && emailUsuario != "") {
-                lifeCycleScope.launch {
-                    val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
-                    viewModel.updateProfile(data, context)
-                    message(context, "Datos actualizados")
-                    viewModel.getUser()
-                    delay(500)
-                    navController.popBackStack()
-                }
+                val data = UserDataUpdate(nombreUsuario, apellidoUsuario, emailUsuario)
+                viewModel.updateProfile(data, context)
+                viewModel.getUser()
             } else {
                 emptyFieldText.value = false
                 message(context, "Complete todos los datos")
             }
         }
+    }
+    if (complete) {
+        viewModel.setCompleteExp(false)
+        navController.popBackStack()
     }
 }
 

@@ -5,11 +5,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.codelesson.ui.screens.LessonRecap
-import com.example.codelesson.ui.screens.MainMovingLabel
-import com.example.codelesson.ui.screens.MultipleResponse
-import com.example.codelesson.ui.screens.ResponseEntry
-import com.example.codelesson.ui.screens.Theory
+import com.example.codelesson.ui.lessonrecap.LessonRecap
+import com.example.codelesson.ui.movinglabels.MainMovingLabel
+import com.example.codelesson.ui.multipleresponse.MultipleResponse
+import com.example.codelesson.ui.responseentry.ResponseEntry
+import com.example.codelesson.ui.theory.Theory
 import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
 

@@ -1,4 +1,4 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.createaccount
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import com.example.codelesson.R
 import com.example.codelesson.data.models.UserData
 import com.example.codelesson.ui.components.logincomponents.SignupTextField
+import com.example.codelesson.ui.components.profileComponents.message
 import com.example.codelesson.ui.theme.audioWide
 import com.example.codelesson.ui.theme.poppins
 import com.example.codelesson.util.UserViewModel
@@ -28,7 +29,7 @@ import com.example.codelesson.util.UserViewModel
 @Composable
 fun CreateAccount(
     userViewModel: UserViewModel,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val name = remember { mutableStateOf("") }
     val lastName = remember { mutableStateOf("") }
@@ -42,7 +43,7 @@ fun CreateAccount(
         color = Color(0xFF1E1E1E),
         modifier = Modifier.fillMaxSize()
     ) {
-        Box(modifier =  Modifier.fillMaxSize()){
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -50,64 +51,81 @@ fun CreateAccount(
                     .padding(horizontal = 24.dp)
             ) {
 
-                Image(painter = painterResource(id = R.drawable.logocodelesson),
+                Image(
+                    painter = painterResource(id = R.drawable.logocodelesson),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(top = 30.dp, bottom = 15.dp )
+                        .padding(top = 30.dp, bottom = 15.dp)
                         .height(75.dp)
                         .align(Alignment.CenterHorizontally)
                 )
 
-                Text(text = "Crear Cuenta",
+                Text(
+                    text = "Crear Cuenta",
                     style = TextStyle(
                         fontSize = 28.sp,
                         fontFamily = audioWide,
                         fontWeight = FontWeight(500),
                         color = Color.White
                     ),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                         .padding(bottom = 10.dp)
                 )
-
-                /*
-                                SignupTextField(hint = "Nombre", value = "" )
-
-                                SignupTextField(hint = "Apellido", value = "" )
-
-                                SignupTextField(hint = "Correo electrónico", value = "" )
-
-                                SignupTextField(hint = "Contraseña", value = "" )
-
-                                SignupTextField(hint = "Confirmar contraseña", value = "" )
-                                */
-
-                SignupTextField(hint = "Nombre", value = name.value, onValueChange = { name.value = it })
-                SignupTextField(hint = "Apellido", value = lastName.value, onValueChange = { lastName.value = it })
-                SignupTextField(hint = "Correo electrónico", value = email.value, onValueChange = { email.value = it })
-                SignupTextField(hint = "Contraseña", value = password.value, onValueChange = { password.value = it })
-                SignupTextField(hint = "Confirmar contraseña", value = confirmPassword.value, onValueChange = { confirmPassword.value = it })
+                SignupTextField(
+                    hint = "Nombre",
+                    value = name.value,
+                    onValueChange = { name.value = it })
+                SignupTextField(
+                    hint = "Apellido",
+                    value = lastName.value,
+                    onValueChange = { lastName.value = it })
+                SignupTextField(
+                    hint = "Correo electrónico",
+                    value = email.value,
+                    onValueChange = { email.value = it })
+                SignupTextField(
+                    hint = "Contraseña",
+                    value = password.value,
+                    onValueChange = { password.value = it })
+                SignupTextField(
+                    hint = "Confirmar contraseña",
+                    value = confirmPassword.value,
+                    onValueChange = { confirmPassword.value = it })
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                val condition = listOf(
+                    password.value,
+                    name.value,
+                    lastName.value,
+                    confirmPassword.value,
+                    email.value
+                )
+
                 Button(
-                    //onClick = { navController.navigate("login") },
                     onClick = {
-                        if (password.value == confirmPassword.value) {
-                            val userData = UserData(
-                                name = name.value,
-                                lastName = lastName.value,
-                                email = email.value,
-                                password = password.value,
-                                exp = 0
-                            )
-                            userViewModel.createUser(userData, context)
-                            navController.navigate("login")
-                            Toast.makeText(context, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
+                        if (condition.all { it.isNotEmpty() }) {
+                            if (password.value == confirmPassword.value) {
+                                val userData = UserData(
+                                    name = name.value,
+                                    lastName = lastName.value,
+                                    email = email.value,
+                                    password = password.value,
+                                    exp = 0
+                                )
+                                userViewModel.createUser(userData, context)
+                                navController.navigate("login")
+                            } else {
+                                message(
+                                    context,
+                                    context.resources.getString(R.string.signup_toast_password)
+                                )
+                            }
                         } else {
-                            Toast.makeText(context, context.resources.getString(R.string.signup_toast_password), Toast.LENGTH_SHORT).show()
+                            message(context, "Por favor, rellene los campos vacios")
                         }
                     },
-
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF572970)
@@ -130,9 +148,10 @@ fun CreateAccount(
                 }
 
                 Row(
-                    modifier = Modifier.padding(top= 35.dp, bottom = 52.dp)
-                ){
-                    Text("¿Ya tienes una cuenta?   ",
+                    modifier = Modifier.padding(top = 35.dp, bottom = 52.dp)
+                ) {
+                    Text(
+                        "¿Ya tienes una cuenta?   ",
                         style = TextStyle(
                             fontSize = 15.sp,
                             fontFamily = poppins,
@@ -149,7 +168,7 @@ fun CreateAccount(
                             color = Color(0xFFB6B6B6)
                         ),
                         modifier = Modifier.clickable {
-                            navController.navigate("login")
+                            navController.popBackStack()
                         }
                     )
                 }

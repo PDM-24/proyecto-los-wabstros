@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.multipleresponse
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -33,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
-import com.example.codelesson.model.Question
 import com.example.codelesson.ui.components.navigation.Graph
 import com.example.codelesson.ui.components.navigation.HomeGraph
 import com.example.codelesson.ui.components.navigation.QuizGraph
@@ -88,9 +86,6 @@ fun MultipleResponse (
 
     val context = LocalContext.current
 
-    Log.i("Question", "Multiple question: $questionsList")
-    Log.i("Practice", "Multiple response: $practiceList")
-    Log.i("EndIndicator", "Response endIndicator: $endIndicator")
     LaunchedEffect(true) {
         viewModel.resetNavRoute()
 

@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.movinglabels
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -86,10 +85,6 @@ fun MovingLabels (
             mutableStateOf(true)
         }
 
-
-        Log.i("Question", "Labels response: $questionsList")
-        Log.i("Practice", "Labels response: $practiceList")
-        Log.i("EndIndicator", "Response endIndicator: $endIndicator")
         Hint(
             hint = questionsList[endIndicator-1].hint,
             isIncorrect = !isCorrect

@@ -1,6 +1,5 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.lessonrecap
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -23,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,45 +43,75 @@ import com.example.codelesson.util.PracticeViewModel
 import com.example.codelesson.util.UserViewModel
 
 @Composable
-fun LessonRecap (
+fun LessonRecap(
     innerPadding: PaddingValues,
     practiceViewModel: PracticeViewModel,
     userViewModel: UserViewModel,
-    navController: NavHostController
-){
-    val exp = remember {
-        mutableStateOf(practiceViewModel.exp.value)
-    }
+    navController: NavHostController,
+) {
+    val exp by userViewModel.exp.collectAsState()
     val recap = remember {
         mutableStateOf(practiceViewModel.practiceList.value.recap)
     }
+    val state by userViewModel.state.collectAsState()
     val title by practiceViewModel.titleTopBar.collectAsState()
     var addExp = 0
     var newExp: ExpUpdateData
+    var conditionButton by remember {
+        mutableStateOf(false)
+    }
+    val complete by userViewModel.completeExp.collectAsState()
 
-    LaunchedEffect(true) {
-        Log.d("Exp", exp.value.toString())
-        practiceViewModel.getExp()
-        when(title) {
-            "OUTPUT" -> { addExp = 5 }
-            "CONDICIONES" -> { addExp = 20}
-            "ESTRUCTURA BÁSICA" -> { addExp = 5}
-            "COMENTARIOS" -> { addExp = 10}
-            "TIPOS DE VARIABLES" -> { addExp = 10}
-            "INPUTS" -> { addExp = 12}
-            "OPERADORES" -> { addExp = 14}
-            "STRINGS" -> { addExp = 14}
-            "BOOLEANOS" -> { addExp = 15}
+    LaunchedEffect(Unit) {
+        userViewModel.getExp()
+    }
+
+    when (title) {
+        "OUTPUT" -> {
+            addExp = 5
         }
-        if (exp.value >= 100) {
-            exp.value = 100
+
+        "CONDICIONES" -> {
+            addExp = 20
+        }
+
+        "ESTRUCTURA BÁSICA" -> {
+            addExp = 5
+        }
+
+        "COMENTARIOS" -> {
+            addExp = 10
+        }
+
+        "TIPOS DE VARIABLES" -> {
+            addExp = 10
+        }
+
+        "INPUTS" -> {
+            addExp = 12
+        }
+
+        "OPERADORES" -> {
+            addExp = 14
+        }
+
+        "STRINGS" -> {
+            addExp = 14
+        }
+
+        "BOOLEANOS" -> {
+            addExp = 15
+        }
+    }
+    if (complete) {
+        val total = exp + addExp
+        if (total >= 100) {
+            newExp = ExpUpdateData(0)
         } else {
-            exp.value += addExp
+            newExp = ExpUpdateData(total)
         }
-        newExp = ExpUpdateData(exp.value)
-        practiceViewModel.updateExp(newExp)
+        userViewModel.updateExp(newExp)
         practiceViewModel.setLessonStatus(title, true)
-        Log.d("Exp", exp.value.toString())
     }
 
     val backHandlerActive = remember {
@@ -90,12 +120,16 @@ fun LessonRecap (
 
     val context = LocalContext.current
 
-    BackHandler{
-        if(backHandlerActive.value){
+    BackHandler {
+        if (backHandlerActive.value) {
             backHandlerActive.value = false
-            Toast.makeText(context, "Presiona de nuevo para regresar al menú principal", Toast.LENGTH_SHORT).show()
-        }else{
-            navController.navigate(HomeGraph.Home.route){
+            Toast.makeText(
+                context,
+                "Presiona de nuevo para regresar al menú principal",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            navController.navigate(HomeGraph.Home.route) {
                 popUpTo(Graph.HOME.graph) {
                     inclusive = true
                 }
@@ -148,11 +182,9 @@ fun LessonRecap (
         Spacer(modifier = Modifier.padding(24.dp))
         //Boton de terminar
         Button(
-            onClick = { navController.navigate(Graph.HOME.graph){
-                popUpTo(Graph.HOME.graph) {
-                    inclusive = true
-                }
-            } },
+            onClick = {
+                conditionButton = true
+            },
             shape = MaterialTheme.shapes.large,
             border = BorderStroke(
                 width = 2.dp,
@@ -176,5 +208,15 @@ fun LessonRecap (
                 )
             )
         }
+    }
+    if (state && conditionButton && complete) {
+        navController.navigate(Graph.HOME.graph) {
+            popUpTo(Graph.HOME.graph) {
+                inclusive = true
+            }
+        }
+        userViewModel.setStatusLesson(false)
+        conditionButton = false
+        userViewModel.setCompleteExp(false)
     }
 }

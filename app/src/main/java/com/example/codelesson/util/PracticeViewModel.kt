@@ -74,6 +74,9 @@ class PracticeViewModel : ViewModel() {
         )
     )
 
+    private val _completed = MutableStateFlow(false)
+    val completed = _completed.asStateFlow()
+
     val practiceList = _practiceList.asStateFlow()
 
     private val _questionList = MutableStateFlow(_practiceList.value.questions.shuffled())
@@ -116,6 +119,23 @@ class PracticeViewModel : ViewModel() {
         getTitle()
     }
 
+    fun setCompleted(status: Boolean) {
+        _completed.value = status
+    }
+
+    fun checkLessonStatus(title: String) : Boolean{
+        var status = false
+         _lessonStatus.value.forEach {
+             status = if (it.title == title) {
+                 it.complete.value
+             } else {
+                 false
+             }
+        }
+
+        return status
+    }
+
     fun resetIndex(){
         _index.value = 0
         _endIndicator.value = 0
@@ -146,7 +166,6 @@ class PracticeViewModel : ViewModel() {
     private val _titleList = MutableStateFlow<List<TitleLesson>>(emptyList())
     val titleList = _titleList.asStateFlow()
     private val _getId = MutableStateFlow("")
-    val getId = _getId.asStateFlow()
     private val _getLesson = MutableStateFlow(
         LessonData(
             "", "", "", "", emptyList()
@@ -155,8 +174,6 @@ class PracticeViewModel : ViewModel() {
     val getLesson = _getLesson.asStateFlow()
     private val _token = MutableStateFlow("")
     val token = _token.asStateFlow()
-    private val _exp = MutableStateFlow(0)
-    val exp = _exp.asStateFlow()
 
     fun startDragging() {
         _isCurrentlyDragging.value = true
@@ -178,7 +195,6 @@ class PracticeViewModel : ViewModel() {
             try {
                 val response = api.getLessonTitle()
                 _titleList.value = response.data
-                Log.d("Title", _titleList.toString())
             } catch (e: Exception) {
                 Log.d("Get Title", e.message.toString())
             }
@@ -191,7 +207,6 @@ class PracticeViewModel : ViewModel() {
     fun getLesson() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("Lesson Viewmodel", _getId.value)
                 val response = api.getLessonById(_getId.value)
                 _getLesson.value = response.data
                 val newQuestion = mutableListOf<Question>()
@@ -208,6 +223,7 @@ class PracticeViewModel : ViewModel() {
                 )
                 _practiceList.value = newLesson
                 _questionList.value = _practiceList.value.questions.shuffled()
+                _completed.value = true
             } catch (e: Exception) {
                 Log.d("Get Lesson", e.message.toString())
             }
@@ -220,32 +236,5 @@ class PracticeViewModel : ViewModel() {
 
     fun obtainToken() : String {
         return _token.value
-    }
-
-    fun getExp() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = api.getExp("Bearer ${_token.value}")
-                _exp.value = response.data.exp
-                Log.d("Exp", _exp.value.toString())
-            }
-            catch (e: Exception) {
-                Log.d("Exp", e.message.toString())
-            }
-        }
-    }
-    //El parametro sera la nueva exp, la cual se calculara en la screen de congrats
-    //y se le enviara como parametro
-    fun updateExp(newExp: ExpUpdateData) {
-        viewModelScope.launch {
-            try {
-                val response = api.updateExp(newExp, "Bearer ${_token.value}")
-                _token.value = response.data.token
-                Log.d("Token", token.value)
-            }
-            catch (e: Exception) {
-                Log.d("Update Exp", e.message.toString())
-            }
-        }
     }
 }

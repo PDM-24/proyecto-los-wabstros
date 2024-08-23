@@ -1,4 +1,4 @@
-package com.example.codelesson.ui.screens
+package com.example.codelesson.ui.movinglabels
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable

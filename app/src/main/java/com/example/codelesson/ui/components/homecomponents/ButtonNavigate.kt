@@ -44,7 +44,6 @@ fun ButtonNavigate(
         list.forEach {
             if (it.title == name.uppercase() && it.complete.value) {
                 status.value = true
-                Log.d("Boton", status.value.toString())
             }
         }
     }
@@ -56,7 +55,7 @@ fun ButtonNavigate(
         if (status.value) {
             BorderStroke(2.dp, NeonGreen)
         } else {
-            BorderStroke(2.dp, MoreTransparentWhite)
+            BorderStroke(2.dp, Color.White)
         },
         onClick = { onClick() },
     ) {
@@ -73,7 +72,7 @@ fun ButtonNavigate(
                 if (status.value) {
                     NeonGreen
                 } else {
-                    MoreTransparentWhite
+                    Color.White
                 }
             )
         }

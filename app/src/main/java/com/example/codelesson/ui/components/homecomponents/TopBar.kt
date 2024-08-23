@@ -5,6 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.example.codelesson.ui.theme.audioWide
 
@@ -19,7 +20,8 @@ fun TopBar(
         Text(
             text = title,
             fontSize = 24.sp,
-            fontFamily = audioWide
+            fontFamily = audioWide,
+            color = Color(0xFFE2E2E2)
         )
     }
 }
